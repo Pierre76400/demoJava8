@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>JAVA8: LES LAMBDAS</title><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport"><link href="reveal.js/css/reveal.css" rel="stylesheet"><link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"><link href="reveal.js/lib/css/zenburn.css" rel="stylesheet"><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script><link rel="stylesheet" href="styles/myCustomCSS.css"></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>JAVA8</h1><h2>LES LAMBDAS</h2><div class="preamble"><div class="paragraph"><p>Pierre LEPLAY<br>
+<span class="icon"><i class="fa fa-github"></i></span> <a href="https://github.com/Pierre76400/">GitHub</a> / <span class="icon blue"><i class="fa fa-twitter"></i></span> <a href="https://twitter.com/PierreLeplay">@PierreLeplay</a><br>
+<span class="image"><img src="images/StarTECH-Java-logo_transparent-background.png" alt="Logo StarTECH" width="150" height="150"></span></p></div></div></section>
+<section id="_qui_suis_je"><h2>Qui suis-je ?</h2><div class="ulist"><ul><li class="fragment"><p><strong>Développeur avec 15 ans d&#8217;expérience</strong></p></li><li class="fragment"><p><strong>Passionné de la veille technologie</strong></p></li><li class="fragment"><p><strong>Membre de la startech Java</strong> <span class="image"><a class="image" href="images/StarTECH-Java-logo_transparent-background.png"><img src="images/StarTECH-Java-logo_transparent-background.png" alt="StarTECH Java logo transparent background" width="150"></a></span></p></li></ul></div></section>
+<section><section id="_c_est_quoi_une_lambda"><h2>C&#8217;est quoi une lambda ?</h2></section><section id="_un_exemple_l_interface_filefilter"><h2>Un exemple : l&#8217;interface FileFilter</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public interface FileFilter {
+	 public boolean accept(java.io.File pathname);
+}</code></pre></div></div></section><section id="_implmentation_avec_une_classe_concrte"><h2>Implémentation avec une classe concréte</h2><div class="listingblock"><div class="title">Implémentation</div><div class="content"><pre class="highlight"><code class="java language-java">public class FileFilterJava implements FileFilter{
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+}</code></pre></div></div>
+<div class="listingblock"><div class="title">Exemple d&#8217;appel</div><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilterJava();
+File repertoire=new File("c:\\temp");
+
+for(File f:repertoire.listFiles(fileFilterJava))
+	System.out.println(f);</code></pre></div></div></section><section id="_implmentation_avec_une_classe_anonyme"><h2>Implémentation avec une classe anonyme</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilter() {
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};
+
+File repertoire=new File("c:\\temp");
+
+for(File f:repertoire.listFiles(fileFilterJava))
+	System.out.println(f);</code></pre></div></div></section><section id="_classe_concrte_vs_anonyme"><h2>Classe concréte VS anonyme</h2><div class="ulist"><ul><li class="fragment"><p>Avec les classes concrètes tout le code n&#8217;est pas au même endroit, ce qui nuit à la bonne compréhension du code</p></li><li class="fragment"><p>Avec les classes anonymes on s’encombre de code technique ce qui nuit à la clarté du code</p></li></ul></div></section><section id="_comment_crire_une_lambda"><h2>Comment écrire une lambda ?</h2><div class="paragraph"><p>On se base sur la déclaration de la classe anonyme :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilter() {
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};</code></pre></div></div>
+<div class="paragraph"><p>1 - On récupére les paramétres de la méthode :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter filter=(File pathname)</code></pre></div></div></section><section id="_comment_crire_une_lambda_2"><h2>Comment écrire une lambda ?</h2><div class="paragraph"><p>On se base sur la déclaration de la classe anonyme :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilter() {
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};</code></pre></div></div>
+<div class="paragraph"><p>2 - On ajoute l&#8217;opérateur "&#8594;" :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter filter=(File pathname)-&gt;</code></pre></div></div></section><section id="_comment_crire_une_lambda_3"><h2>Comment écrire une lambda ?</h2><div class="paragraph"><p>On se base sur la déclaration de la classe anonyme :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilter() {
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};</code></pre></div></div>
+<div class="paragraph"><p>3 - On rajoute le code de la méthode :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter filter=(File pathname)-&gt;pathname.getName().endsWith(".java");</code></pre></div></div></section><section id="_conclusion"><h2>Conclusion</h2><div class="ulist"><ul><li class="fragment"><p>Les lambdas sont juste une nouvelle façon d&#8217;écrire les classes anonymes</p></li><li class="fragment"><p>Cela permet  d&#8217;écrire des instances de classes anonymes plus facile à lire et à écrire</p></li></ul></div></section></section>
+<section><section id="_dmo"><h2>Démo</h2></section><section id="_conclusion_2"><h2>Conclusion</h2><div class="ulist"><ul><li class="fragment"><p>Quand on a plusieurs lignes de codes dans la lambda , on utilise les accolades</p></li><li class="fragment"><p>Une lambda , peut prendre de 0 à n paramètres</p></li></ul></div></section></section>
+<section><section id="_interface_fonctionnel"><h2>Interface fonctionnel</h2></section><section id="_quel_est_le_type_des_lambdas"><h2>Quel est le type des lambdas ?</h2><div class="paragraph"><p>Les lambdas sont de type "interface fonctionnel" ou "functional interface" en anglais</p></div></section><section id="_une_interface_fonctionnel_c_est_quoi"><h2>Une interface fonctionnel c&#8217;est quoi ?</h2><div class="paragraph"><p>Une interface avec une méthode abstraite unique (les méthodes d&#8217;Object ne comptent pas)</p></div>
+<div class="paragraph"><p>Exemple :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface Comparator&lt;T&gt; {
+    int compare(T o1, T o2);
+	boolean equals(Object obj);
+}</code></pre></div></div></section><section id="_l_annotation_functionalinterface"><h2>L&#8217;annotation @FunctionalInterface</h2><div class="paragraph"><p>L&#8217;annotation @FunctionalInterface est optionnelle.</p></div>
+<div class="paragraph"><p>Elle sert uniquement au moment de la compilation , le compilateur indique une erreur si l&#8217;interface annotée ne correspond pas à une interface fonctionnelle.</p></div></section><section id="_dmo_2"><h2>Démo</h2></section><section id="_conclusion_3"><h2>Conclusion</h2><div class="ulist"><ul><li class="fragment"><p>Les lambdas sont de type "interface fonctionnel"</p></li><li class="fragment"><p>Une interface fonctionnel c&#8217;est une interface avec une méthode abstraite unique</p></li><li class="fragment"><p>L&#8217;interface @FunctionalInterface est optionnelle</p></li></ul></div></section></section>
+<section><section id="_la_boite__outils_functionnel_interface"><h2>La boite à outils Functionnel interface</h2></section><section id="_la_boite__outils_functionnel_interface_2"><h2>La boite à outils Functionnel interface</h2><div class="ulist"><ul><li><p>Dans le package java.util.function</p></li><li><p>43 nouvelles interfaces</p></li><li><p>Divisée en 4 catégories</p></li></ul></div></section><section id="_supplier"><h2>Supplier</h2><div class="paragraph"><p>Supplier ou fournisseur ne prend aucun objet en paramètre et en renvoie un.</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface Supplier&lt;T&gt; {
+
+    T get();
+}</code></pre></div></div></section><section id="_consumer"><h2>Consumer</h2><div class="paragraph"><p>Consumer ou consommateur prend un objet en paramètre et ne renvoie rien.</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface Consumer&lt;T&gt; {
+    void accept(T t);
+}</code></pre></div></div></section><section id="_function"><h2>Function</h2><div class="paragraph"><p>Function ou fonction prend un objet en paramètre et en renvoie un de type différent</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public interface Function&lt;T, R&gt; {
+
+    R apply(T t);
+}</code></pre></div></div></section><section id="_unaryoperator"><h2>UnaryOperator</h2><div class="paragraph"><p>UnaryOperator est une Function spécifique , qui prend un objet en paramètre et renvoie objet du même type que le paramètre.</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface UnaryOperator&lt;T&gt; extends Function&lt;T, T&gt; {
+	T apply(T t);
+}</code></pre></div></div></section><section id="_les_variantes"><h2>Les variantes</h2><div class="paragraph"><p>Il existe de nombreuse variantes dans les 4 catégories , comme celles qui prennent plusieurs objet en entrée.
+Exemple : BiConsumer ou BiPredicate</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface BiConsumer&lt;T, U&gt; {
+    void accept(T t, U u);
+}</code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface BiPredicate&lt;T, U&gt; {
+    boolean test(T t, U u);
+}</code></pre></div></div></section></section>
+<section><section id="_syntaxe_avance_pour_les_lambdas"><h2>Syntaxe avancée pour les lambdas</h2></section><section id="_les_paramtres"><h2>Les paramètres</h2><div class="paragraph"><p>On n&#8217;a pas besoin de préciser le type des paramétres :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Comparator&lt;Integer&gt; c=(Integer i1, Integer i2)-&gt;Integer.compare(i1, i2);</code></pre></div></div>
+<div class="paragraph"><p>devient :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Comparator&lt;Integer&gt; c=(i1,i2)-&gt;Integer.compare(i1, i2);</code></pre></div></div></section><section id="_les_rfrences_de_mthodes"><h2>Les références de méthodes</h2><div class="paragraph"><p>Quand on a qu&#8217;un seul appel de méthode on peut utiliser l&#8217;opérateur "::"</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Consumer&lt;String&gt; consumerPrint=s-&gt;System.out.println(s);</code></pre></div></div>
+<div class="paragraph"><p>devient :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Consumer&lt;String&gt; consumerPrint=System.out::println;</code></pre></div></div></section><section id="_les_rfrences_de_mthodes_2"><h2>Les références de méthodes</h2><div class="paragraph"><p>Autre exemple</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Comparator&lt;Integer&gt; c=(Integer i1, Integer i2)-&gt;Integer.compare(i1, i2);</code></pre></div></div>
+<div class="paragraph"><p>devient :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Comparator&lt;Integer&gt; c=Integer::compare;</code></pre></div></div></section><section id="_conclusion_4"><h2>Conclusion</h2><div class="ulist"><ul><li class="fragment"><p>On n&#8217;a pas besoin de préciser le type des paramétres dans les lambdas</p></li><li class="fragment"><p>Quand on a qu&#8217;un seul appel de méthode (statique ou non) on peut utiliser l&#8217;opérateur "::"</p></li></ul></div></section><section id="_dmo_3"><h2>Démo</h2></section></section>
+<section><section id="_les_lambdas_cela_sert__quoi"><h2>Les lambdas , cela sert à quoi ?</h2></section><section id="_dmo_4"><h2>Démo</h2></section></section>
+<section><section id="_une_lambda_est_elle_un_objet"><h2>Une lambda est elle un objet ?</h2></section><section id="_une_lambda_est_elle_un_objet_2"><h2>Une lambda est elle un objet ?</h2><div class="ulist"><ul><li><p>Non , il s&#8217;agit d&#8217;un nouveau type (objet sans identité)</p></li><li><p>Plus rapide que la création d&#8217;une classe anonyme</p></li><li><p>Pas besoin de redéfinir les méthodes d&#8217;object</p></li></ul></div></section></section>
+<section><section id="_mthodes_par_dfaut_dans_les_interfaces"><h2>Méthodes par défaut dans les interfaces</h2></section><section id="_mthodes_par_dfaut_dans_les_interfaces_2"><h2>Méthodes par défaut dans les interfaces</h2><div class="paragraph"><p>Depuis java 8 , on peut définir une implémentation par défaut à une méthode.
+Mais à quoi cela sert il ?</p></div></section><section id="_mthodes_par_dfaut_dans_les_interfaces_3"><h2>Méthodes par défaut dans les interfaces</h2><div class="paragraph"><p>Cela permet de rajouter de nouvelles méthodes sans casser les contrats d&#8217;interface existants :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public interface Iterable&lt;T&gt; {
+
+    Iterator&lt;T&gt; iterator();
+
+    default void forEach(Consumer&lt;? super T&gt; action) {
+        Objects.requireNonNull(action);
+        for (T t : this) {
+            action.accept(t);
+        }
+    }
+}</code></pre></div></div></section><section id="_mthodes_par_dfaut_dans_les_interfaces_4"><h2>Méthodes par défaut dans les interfaces</h2><div class="paragraph"><p>Cela permet de rajouter de nouvelles possibilités aux interfaces fonctionnels</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface Predicate&lt;T&gt; {
+
+    boolean test(T t);
+
+    default Predicate&lt;T&gt; and(Predicate&lt;? super T&gt; other) {
+        Objects.requireNonNull(other);
+        return (t) -&gt; test(t) &amp;&amp; other.test(t);
+    }
+}</code></pre></div></div></section><section id="_dmo_5"><h2>Démo</h2></section></section>
+<section id="_des_questions"><h2>Des questions ?</h2></section>
+<section id="_donc_passionn_et_fier_de_l_tre"><h2>DONC, passionné et fier de l&#8217;être ?</h2><div class="paragraph"><p><span class="image"><img src="images/StarTECH-Java_we-want-you.png" alt="StarTECH Java we want you" width="400"></span></p></div>
+<div class="paragraph"><p>Rejoins-nous !<br>
+<a href="mailto:startech-java@softeam.fr?subject=Inscription%20au%20StarTECH%20Java%20!&amp;body=Java%20roxxe%20!%0AJe%20veux%20contribuer%2C%20et%20souhaite%20rejoindre%20le%20groupe.%0A%0AEl%C3%A9ments%20%C3%A0%20fournir%20pour%20le%20trombinoscope%20%3A%0ANom%20et%20pr%C3%A9nom%20%3A%20XXX%0ACourte%20description%20%3A%20qui%20je%20suis%2C%20ce%20que%20j&#8217;aime%2C%20les%20techno%20dont%20je%20suis%20fan%2C%20etc.%0A%0AJ&#8217;ai%20bien%20lu%20le%20manifeste%2C%20et%20suis%20en%20accord%20avec%20les%20valeurs%20qu&#8217;il%20d%C3%A9fend.%0A">Inscription au StarTECH Java</a></p></div></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: true,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: false,
+  // Push each slide change to the browser history
+  history: false,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: true,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'black',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'slide',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: '',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 960,
+  height: 700,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0.1,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script></body></html>

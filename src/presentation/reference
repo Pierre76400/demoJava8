@@ -1,0 +1,5 @@
+#Référence hash code
+
+http://michalorman.com/2012/07/do-not-override-equals-and-hashcode-for-entities/
+http://stackoverflow.com/questions/1638723/equals-and-hashcode-in-hibernate
+http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#mapping-model-pojo-equalshashcode
