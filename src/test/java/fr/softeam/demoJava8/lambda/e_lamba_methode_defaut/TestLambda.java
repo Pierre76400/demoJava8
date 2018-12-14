@@ -1,4 +1,4 @@
-package fr.softeam.demoJava8.c_lamba_syntaxe_avancee;
+package fr.softeam.demoJava8.lambda.e_lamba_methode_defaut;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -26,21 +26,10 @@ public class TestLambda {
 	}
 	
 	@Test
-	public void test_afficherStat() throws InterruptedException {
-		System.out.println("Personne faisant plus de 175 cm :");
-		for(Personne p:personnes) {
-			if(p.getTaille()>175) {
-				System.out.println(p.getNom());
-			}
-		}
+	public void test_forEach() throws InterruptedException {
+		Consumer<Personne> c=s->System.out.println(s.getNom());
 		
-		System.out.println("");
-		System.out.println("Personne faisant plus de 75 kg :");
-		for(Personne p:personnes) {
-			if(p.getPoids()>75) {
-				System.out.println(p.getNom());
-			}
-		}
+		personnes.forEach(c);
 	}	
 	
 	@Test
@@ -54,6 +43,11 @@ public class TestLambda {
 		Predicate<Personne> predicatPlusDe75kg=p->p.getPoids()>75;
 		System.out.println("Personne faisant plus de 75 kg :");
 		afficherPersonne(personnes,predicatPlusDe75kg);
+		
+
+		System.out.println("");
+		System.out.println("Personne faisant plus de 175 cm et plus de 75 kg :");
+		afficherPersonne(personnes,predicatPlusDe175cm.and(predicatPlusDe75kg));
 	}
 
 	private void afficherPersonne(List<Personne> personnes,Predicate<Personne> predicate) {

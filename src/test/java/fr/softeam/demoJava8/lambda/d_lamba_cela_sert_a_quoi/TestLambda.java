@@ -1,4 +1,4 @@
-package fr.softeam.demoJava8.d_lamba_cela_sert_a_quoi;
+package fr.softeam.demoJava8.lambda.d_lamba_cela_sert_a_quoi;
 
 import java.io.File;
 import java.io.FileFilter;

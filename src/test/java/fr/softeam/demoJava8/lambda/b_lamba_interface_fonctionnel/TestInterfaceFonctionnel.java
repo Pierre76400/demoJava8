@@ -1,4 +1,4 @@
-package fr.softeam.demoJava8.b_lamba_interface_fonctionnel;
+package fr.softeam.demoJava8.lambda.b_lamba_interface_fonctionnel;
 
 import java.io.File;
 import java.io.FileFilter;

@@ -1,4 +1,4 @@
-package fr.softeam.demoJava8.c_lamba_syntaxe_avancee.solution;
+package fr.softeam.demoJava8.lambda.c_lamba_syntaxe_avancee.solution;
 
 import java.io.File;
 import java.io.FileFilter;

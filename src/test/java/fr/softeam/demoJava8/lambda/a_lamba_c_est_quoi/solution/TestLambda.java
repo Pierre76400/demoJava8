@@ -1,4 +1,4 @@
-package fr.softeam.demoJava8.a_lamba_c_est_quoi.solution;
+package fr.softeam.demoJava8.lambda.a_lamba_c_est_quoi.solution;
 
 import java.io.File;
 import java.io.FileFilter;

@@ -1,4 +1,4 @@
-package fr.softeam.demoJava8.e_lamba_methode_defaut;
+package fr.softeam.demoJava8.lambda.e_lamba_methode_defaut;
 
 public class Personne {
 	

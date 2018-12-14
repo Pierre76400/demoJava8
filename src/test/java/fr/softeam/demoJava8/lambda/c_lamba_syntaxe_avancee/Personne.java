@@ -1,4 +1,4 @@
-package fr.softeam.demoJava8.c_lamba_syntaxe_avancee;
+package fr.softeam.demoJava8.lambda.c_lamba_syntaxe_avancee;
 
 public class Personne {
 	
