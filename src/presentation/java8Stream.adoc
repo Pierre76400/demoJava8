@@ -109,6 +109,27 @@ TODO Insert code
 on peut chainer plusieurs Consumer avec la méthode abstraite andThen
 
 
+=== Deuxiéme opération : filter
+
+La méthode filter permet de filtrer les éléments d'une stream.
+Prend en paramétre un prédicat.
+
+TODO Insert code 
+
+
+Filter retourne une stream
+
+== IF : Predicat
+
+TODO Insert javadoc
+
+TODO Insert code
+
+on peut chainer plusieurs Consumer avec des méthodes abstraites ... (ATTENTION les opérations sont appliqués de gauche à droite et non suivante l'ordre mathématique)
+
+
+
+
 
 === Exemple de Map / Filter / Reduce
 Exemple : On veut calculer la moyenne d'age d'une liste de personnes dont l'age est supérieur à 20 ans
