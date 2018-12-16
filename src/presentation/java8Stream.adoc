@@ -1,0 +1,493 @@
+= JAVA8: LES STREAMS
+// classic AsciiDoctor attributes
+:icons: font
+:imagesdir: images
+// Despite the warning of the documentation, https://github.com/asciidoctor/asciidoctor-reveal.js, highlight.js syntax highlighting WORKS, BUT, you need to explicitly set the highlighter using the below attribute
+// see http://discuss.asciidoctor.org/Highlighting-source-code-for-reveal-js-backend-td2750.html
+:source-highlighter: highlightjs
+// reveal.js attributes
+:customcss: styles/myCustomCSS.css
+
+Pierre LEPLAY +
+icon:github[] https://github.com/Pierre76400/[GitHub] / icon:twitter[role="blue"] https://twitter.com/PierreLeplay[@PierreLeplay] +
+image:StarTECH-Java-logo_transparent-background.png[Logo StarTECH,150,150]
+
+== Qui suis-je ?
+[%step]
+* *Développeur avec 15 ans d'expérience*
+* *Passionné de la veille technologie*
+* *Membre de la startech Java* image:StarTECH-Java-logo_transparent-background.png[width=150,link="images/StarTECH-Java-logo_transparent-background.png"] 
+
+
+== Map / Filter / Reduce
+
+
+=== Map / Filter / Reduce
+
+[%step]
+* Pattern d'architecture pour traiter les flux de données
+* Provient de la rpogrammation fonctionnel
+* Pas spécifique à java
+
+
+=== Exemple de Map / Filter / Reduce
+Exemple : On veut calculer la moyenne d'age d'une liste de personnes dont l'age est supérieur à 20 ans
+
+
+=== 1ére étape : Map
+Prend en entrée la liste de personnes et renvoi une liste d'age (entier)
+
+=== 2éme étape : Filter
+Filtre dans la liste d'age , les éléments supérieurs à 20.
+
+=== 3éme étape : Reduce
+Equivalent à une agrégation SQL.
+
+Renvoie la moyenne des élements supérieur à 20.
+
+
+== Stream (DEFINITION
+
+=== C'est quoi une stream ?
+
+[%step]
+* Réponse technique : une interface
+* Nouveau concept : cela ressemble à une collection mais ce n'en est pas une
+
+=== Cela sert à quoi ?
+
+[%step]
+* Destiné à traiter efficacement de petits ou grands lots de données
+* Efficace car on peut effectuer des traitements en parraléle sans écrire de code technique
+* Pipeline : toutes les données ne sont traités qu'une seule fois et évite les calculs intermédiaires
+
+=== Fusinner les 2 slides précédents avec celui
+
+[%step]
+* Les Stream sont différent de l'API car on ne voulait pas faire évoluer les API collections
+
+
+=== Au final , c'est quoi une stream ?
+
+
+[%step]
+* Un objet dans lequem on peut définir des opérations
+* Un objet qui ne posséde pas de données (A REVOIR)
+* Un objet qui ne doit pas changer de données qu'il traite
+* UN objet cpaable de traiter les données en une seule traite
+
+
+== Syntaxe
+
+=== Comment construire une stream ?
+
+Le plus simple est la méthode "streams" sur collections
+
+TODO Insert code 
+
+=== Comment construire une stream ?
+
+On peut utiliser également of
+
+TODO Insert code 
+
+
+=== Premiére opération : forEach
+
+forEach effectue une action pour chaque élément du stream.
+Prend en paramétre un Consumer.
+Ne retourne rien
+
+TODO Insert code 
+
+== IF : consumer
+
+TODO Insert javadoc
+
+TODO Insert code
+
+on peut chainer plusieurs Consumer avec la méthode abstraite andThen
+
+
+
+=== Exemple de Map / Filter / Reduce
+Exemple : On veut calculer la moyenne d'age d'une liste de personnes dont l'age est supérieur à 20 ans
+
+
+=== 1ére étape : Map
+Prend en entrée la liste de personnes et renvoi une liste d'age (entier)
+
+=== 2éme étape : Filter
+Filtre dans la liste d'age , les éléments supérieurs à 20.
+
+=== 3éme étape : Reduce
+Equivalent à une agrégation SQL.
+
+Renvoie la moyenne des élements supérieur à 20.
+
+
+
+
+
+
+
+
+
+=== Implémentation avec une classe concréte  
+[{stepwise}]
+
+.Implémentation
+[source,java]
+----
+public class FileFilterJava implements FileFilter{
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+}
+----
+
+.Exemple d'appel
+[source,java]
+----
+FileFilter fileFilterJava=new FileFilterJava();		
+File repertoire=new File("c:\\temp");
+		
+for(File f:repertoire.listFiles(fileFilterJava))
+	System.out.println(f);
+----
+
+
+=== Implémentation avec une classe anonyme  
+[source,java]
+----
+
+FileFilter fileFilterJava=new FileFilter() {		
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};
+
+File repertoire=new File("c:\\temp");
+
+for(File f:repertoire.listFiles(fileFilterJava))
+	System.out.println(f);
+
+----
+
+=== Classe concréte VS anonyme
+
+[%step]
+* Avec les classes concrètes tout le code n'est pas au même endroit, ce qui nuit à la bonne compréhension du code
+* Avec les classes anonymes on s’encombre de code technique ce qui nuit à la clarté du code
+
+=== Comment écrire une lambda ?
+On se base sur la déclaration de la classe anonyme :
+[source,java]
+----
+
+FileFilter fileFilterJava=new FileFilter() {		
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};
+----
+
+1 - On récupére les paramétres de la méthode :
+[source,java]
+----
+FileFilter filter=(File pathname)
+----
+
+=== Comment écrire une lambda ?
+On se base sur la déclaration de la classe anonyme :
+[source,java]
+----
+
+FileFilter fileFilterJava=new FileFilter() {		
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};
+----
+
+2 - On ajoute l'opérateur "->" :
+[source,java]
+----
+FileFilter filter=(File pathname)->
+----
+
+
+=== Comment écrire une lambda ?
+On se base sur la déclaration de la classe anonyme :
+[source,java]
+----
+
+FileFilter fileFilterJava=new FileFilter() {		
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};
+----
+
+3 - On rajoute le code de la méthode :
+[source,java]
+----
+FileFilter filter=(File pathname)->pathname.getName().endsWith(".java");
+----
+
+
+=== Conclusion
+
+[%step]
+* Les lambdas sont juste une nouvelle façon d'écrire les classes anonymes
+* Cela permet  d'écrire des instances de classes anonymes plus facile à lire et à écrire
+
+
+== Démo
+
+=== Conclusion
+
+[%step]
+* Quand on a plusieurs lignes de codes dans la lambda , on utilise les accolades
+* Une lambda , peut prendre de 0 à n paramètres
+
+
+== Interface fonctionnel
+
+=== Quel est le type des lambdas ?
+
+Les lambdas sont de type "interface fonctionnel" ou "functional interface" en anglais 
+
+=== Une interface fonctionnel c'est quoi ?
+
+Une interface avec une méthode abstraite unique (les méthodes d'Object ne comptent pas)
+
+Exemple :
+
+[source,java]
+----
+@FunctionalInterface
+public interface Comparator<T> {
+    int compare(T o1, T o2);
+	boolean equals(Object obj);
+}
+----
+
+=== L'annotation @FunctionalInterface
+
+L'annotation @FunctionalInterface est optionnelle.
+
+Elle sert uniquement au moment de la compilation , le compilateur indique une erreur si l'interface annotée ne correspond pas à une interface fonctionnelle.
+ 
+
+=== Démo
+
+=== Conclusion
+
+[%step]
+* Les lambdas sont de type "interface fonctionnel"
+* Une interface fonctionnel c'est une interface avec une méthode abstraite unique
+* L'interface @FunctionalInterface est optionnelle
+
+
+
+== La boite à outils Functionnel interface
+
+
+=== La boite à outils Functionnel interface
+- Dans le package java.util.function
+- 43 nouvelles interfaces
+- Divisée en 4 catégories
+
+=== Supplier
+
+Supplier ou fournisseur ne prend aucun objet en paramètre et en renvoie un. 
+[source,java]
+----
+@FunctionalInterface
+public interface Supplier<T> {
+
+    T get();
+}
+----
+
+
+=== Consumer
+
+Consumer ou consommateur prend un objet en paramètre et ne renvoie rien. 
+[source,java]
+----
+@FunctionalInterface
+public interface Consumer<T> {
+    void accept(T t);
+}
+----
+
+
+=== Function
+
+Function ou fonction prend un objet en paramètre et en renvoie un de type différent 
+[source,java]
+----
+public interface Function<T, R> {
+
+    R apply(T t);
+}
+----
+
+
+=== UnaryOperator
+
+UnaryOperator est une Function spécifique , qui prend un objet en paramètre et renvoie objet du même type que le paramètre.
+
+[source,java]
+----
+@FunctionalInterface
+public interface UnaryOperator<T> extends Function<T, T> {
+	T apply(T t);
+}
+----
+
+
+=== Les variantes
+
+Il existe de nombreuse variantes dans les 4 catégories , comme celles qui prennent plusieurs objet en entrée.
+Exemple : BiConsumer ou BiPredicate
+
+[source,java]
+----
+@FunctionalInterface
+public interface BiConsumer<T, U> {
+    void accept(T t, U u);
+}
+----
+
+[source,java]
+----
+@FunctionalInterface
+public interface BiPredicate<T, U> {
+    boolean test(T t, U u);
+}
+----
+
+
+== Syntaxe avancée pour les lambdas
+
+=== Les paramètres
+
+On n'a pas besoin de préciser le type des paramétres :
+[source,java]
+----
+Comparator<Integer> c=(Integer i1, Integer i2)->Integer.compare(i1, i2);
+----
+devient :
+[source,java]
+----
+Comparator<Integer> c=(i1,i2)->Integer.compare(i1, i2);
+----
+
+=== Les références de méthodes
+
+Quand on a qu'un seul appel de méthode on peut utiliser l'opérateur "::"
+[source,java]
+----
+Consumer<String> consumerPrint=s->System.out.println(s);
+----
+devient :
+[source,java]
+----
+Consumer<String> consumerPrint=System.out::println;
+----
+
+=== Les références de méthodes
+
+Autre exemple 
+[source,java]
+----
+Comparator<Integer> c=(Integer i1, Integer i2)->Integer.compare(i1, i2);
+----
+devient :
+[source,java]
+----
+Comparator<Integer> c=Integer::compare;
+----
+
+
+=== Conclusion
+
+[%step]
+* On n'a pas besoin de préciser le type des paramétres dans les lambdas
+* Quand on a qu'un seul appel de méthode (statique ou non) on peut utiliser l'opérateur "::"
+
+=== Démo
+
+
+== Les lambdas , cela sert à quoi ?
+
+=== Démo
+
+
+== Une lambda est elle un objet ?
+
+=== Une lambda est elle un objet ?
+- Non , il s'agit d'un nouveau type (objet sans identité)
+- Plus rapide que la création d'une classe anonyme
+- Pas besoin de redéfinir les méthodes d'object
+
+== Méthodes par défaut dans les interfaces
+
+=== Méthodes par défaut dans les interfaces
+Depuis java 8 , on peut définir une implémentation par défaut à une méthode.
+Mais à quoi cela sert il ?
+
+=== Méthodes par défaut dans les interfaces
+Cela permet de rajouter de nouvelles méthodes sans casser les contrats d'interface existants :
+
+[source,java]
+----
+public interface Iterable<T> {
+    
+    Iterator<T> iterator();
+    
+    default void forEach(Consumer<? super T> action) {
+        Objects.requireNonNull(action);
+        for (T t : this) {
+            action.accept(t);
+        }
+    }
+}
+----
+
+
+=== Méthodes par défaut dans les interfaces
+Cela permet de rajouter de nouvelles possibilités aux interfaces fonctionnels
+
+[source,java]
+----
+@FunctionalInterface
+public interface Predicate<T> {
+
+    boolean test(T t);
+
+    default Predicate<T> and(Predicate<? super T> other) {
+        Objects.requireNonNull(other);
+        return (t) -> test(t) && other.test(t);
+    }
+}
+----
+
+=== Démo
+
+== Des questions ?
+
+== DONC, passionné et fier de l'être ?
+
+image:StarTECH-Java_we-want-you.png[width=400]
+
+Rejoins-nous ! +
+mailto:startech-java@softeam.fr?subject=Inscription%20au%20StarTECH%20Java%20!&amp;body=Java%20roxxe%20!%0AJe%20veux%20contribuer%2C%20et%20souhaite%20rejoindre%20le%20groupe.%0A%0AEl%C3%A9ments%20%C3%A0%20fournir%20pour%20le%20trombinoscope%20%3A%0ANom%20et%20pr%C3%A9nom%20%3A%20XXX%0ACourte%20description%20%3A%20qui%20je%20suis%2C%20ce%20que%20j'aime%2C%20les%20techno%20dont%20je%20suis%20fan%2C%20etc.%0A%0AJ'ai%20bien%20lu%20le%20manifeste%2C%20et%20suis%20en%20accord%20avec%20les%20valeurs%20qu'il%20d%C3%A9fend.%0A[Inscription au StarTECH Java]
