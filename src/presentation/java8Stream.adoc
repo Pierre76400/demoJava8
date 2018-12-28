@@ -26,19 +26,26 @@ image:StarTECH-Java-logo_transparent-background.png[Logo StarTECH,150,150]
 
 [%step]
 * Pattern d'architecture pour traiter les flux de données
-* Provient de la rpogrammation fonctionnel
+* Issu de la programmation fonctionnel
 * Pas spécifique à java
 
 
 === Exemple de Map / Filter / Reduce
-Exemple : On veut calculer la moyenne d'age d'une liste de personnes dont l'age est supérieur à 20 ans
+Prenons une liste de personne:
+[source,java]
+----
+List<Personne> personnes= new ArrayList<>();
+----
+
+On veut calculer la moyenne d'age d'une liste de personnes dont l'age est supérieur à 20 ans.
 
 
 === 1ére étape : Map
-Prend en entrée la liste de personnes et renvoi une liste d'age (entier)
+Prend en entrée la liste de personnes (List<Personne> et renvoi une liste d'age (List<Integer>).
+La taille des listes est identique.
 
 === 2éme étape : Filter
-Filtre dans la liste d'age , les éléments supérieurs à 20.
+Filtre dans la liste d'age les éléments supérieurs à 20.
 
 === 3éme étape : Reduce
 Equivalent à une agrégation SQL.
@@ -46,50 +53,60 @@ Equivalent à une agrégation SQL.
 Renvoie la moyenne des élements supérieur à 20.
 
 
-== Stream (DEFINITION
+== Définition des Streams 
 
 === C'est quoi une stream ?
 
 [%step]
 * Réponse technique : une interface
-* Nouveau concept : cela ressemble à une collection mais ce n'en est pas une
+
+[source,java]
+----
+public interface Stream<T> extends BaseStream<T, Stream<T>> {
+...
+----
+
+* Un nouveau concept : cela ressemble à une collection mais ce n'en est pas une
 
 === Cela sert à quoi ?
 
 [%step]
 * Destiné à traiter efficacement de petits ou grands lots de données
-* Efficace car on peut effectuer des traitements en parraléle sans écrire de code technique
-* Pipeline : toutes les données ne sont traités qu'une seule fois et évite les calculs intermédiaires
-
-=== Fusinner les 2 slides précédents avec celui
-
-[%step]
-* Les Stream sont différent de l'API car on ne voulait pas faire évoluer les API collections
-
+* Efficace car on peut effectuer des traitements en paralléle sans écrire de code technique
+* Pipeline : toutes les données ne sont traités qu'une seule fois et cela évite les calculs intermédiaires
 
 === Au final , c'est quoi une stream ?
 
 
 [%step]
-* Un objet dans lequem on peut définir des opérations
-* Un objet qui ne posséde pas de données (A REVOIR)
+* Un objet dans lequel on peut définir des opérations
+* Un objet qui ne contient pas de données
 * Un objet qui ne doit pas changer de données qu'il traite
-* UN objet cpaable de traiter les données en une seule traite
+* Un objet capable de traiter les données en une seule traite
+* Les Stream sont différents de l'API Collection car on voulait introduire de nouveaux concepts sans faire évoluer l'API collections
 
 
 == Syntaxe
 
 === Comment construire une stream ?
 
-Le plus simple est la méthode "streams" sur collections
+Via la méthode "streams" sur l'API collection
 
-TODO Insert code 
+[source,java]
+----
+List<Personne> personnes=Arrays.asList(p1,p2,p3);
+		
+Stream<Personne> s=personnes.stream();
+----
 
 === Comment construire une stream ?
 
-On peut utiliser également of
+On peut également utiliser la méthode Stream.of
 
-TODO Insert code 
+[source,java]
+----
+Stream<Personne> s=Stream.of(p1,p2,p3);
+----
 
 
 === Premiére opération : forEach
@@ -98,35 +115,112 @@ forEach effectue une action pour chaque élément du stream.
 Prend en paramétre un Consumer.
 Ne retourne rien
 
-TODO Insert code 
 
-== IF : consumer
+[source,java]
+----
+void forEach(Consumer<? super T> action);
+----
 
-TODO Insert javadoc
+=== Un exemple avec forEach
 
-TODO Insert code
+[source,java]
+----
+List<Personne> personnes=Arrays.asList(p1,p2,p3);
+		
+Stream<Personne> s=personnes.stream();
+		
+s.forEach(p->System.out.println(p));
+----
 
-on peut chainer plusieurs Consumer avec la méthode abstraite andThen
+
+== IF : Consumer
+
+Consumer est une interface fonctionnelle : 
+[source,java]
+----
+@FunctionalInterface
+public interface Consumer<T> {
+
+void accept(T t);
+...
+
+----
+
+Peux être implémenté par une lambda :
+[source,java]
+----
+p->System.out.println(p)
+System.out::println //Référence de méthode
+----
+
+== Comment chainer plusieurs Consumers
+Comment peut on enchainer plusieurs Consumers sachant que la méthode forEach ne retourne rien ?
+
+
+== Comment chainer plusieurs Consumers
+Grace aux méthodes abstraites de Consumer:
+[source,java]
+----
+Stream<Personne> s=personnes.stream();
+		
+Consumer<Personne> consNom=(p->System.out.println(p.getNom()));
+Consumer<Personne> consAge=(p->System.out.println(p.getAge()));
+		
+s.forEach(consNom.andThen(consAge));
+----
 
 
 === Deuxiéme opération : filter
 
 La méthode filter permet de filtrer les éléments d'une stream.
-Prend en paramétre un prédicat.
-
-TODO Insert code 
-
-
-Filter retourne une stream
+Elle prend en paramétre un prédicat.
+[source,java]
+----
+List<Personne> personnes=Arrays.asList(p1,p2,p3);
+		
+Stream<Personne> s=personnes.stream();
+		
+s.filter(p->p.getAge()>20)
+----
 
 == IF : Predicat
 
-TODO Insert javadoc
+Consumer est une interface fonctionnelle : 
+[source,java]
+----
+@FunctionalInterface
+public interface Predicate<T> {
 
-TODO Insert code
+boolean test(T t);
+...
 
-on peut chainer plusieurs Consumer avec des méthodes abstraites ... (ATTENTION les opérations sont appliqués de gauche à droite et non suivante l'ordre mathématique)
+----
 
+Peux être implémenté par une lambda :
+[source,java]
+----
+p->p.getAge()>20
+----
+
+== Comment chainer plusieurs Predicates
+Comment peut on enchainer plusieurs Consumers sachant que la méthode forEach ne retourne rien ?
+
+on peut chainer plusieurs Consumer avec les méthodes abstraites suivantes :
+[source,java]
+----
+default Predicate<T> and(Predicate<? super T> other) {... ]
+default Predicate<T> negate() { ... }
+default Predicate<T> or(Predicate<? super T> other) { ... }
+----
+
+(ATTENTION les opérations sont appliqués de gauche à droite et non suivante l'ordre mathématique)
+[source,java]
+----
+s.filter(nomCommencantParA.or(ageSup20.and(ageInf60)));// (nomCommencantParA OR ageSup20) AND ageInf60
+----
+
+
+=== Démo
 
 
 
