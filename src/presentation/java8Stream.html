@@ -10,138 +10,422 @@ La taille des listes est identique.</p></div></section><section id="_2me_tape_fi
 <section><section id="_dfinition_des_streams"><h2>Définition des Streams</h2></section><section id="_c_est_quoi_une_stream"><h2>C&#8217;est quoi une stream ?</h2><div class="ulist"><ul><li class="fragment"><p>Réponse technique : une interface</p></li></ul></div>
 <div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public interface Stream&lt;T&gt; extends BaseStream&lt;T, Stream&lt;T&gt;&gt; {
 ...</code></pre></div></div>
-<div class="ulist"><ul><li><p>Un nouveau concept : cela ressemble à une collection mais ce n&#8217;en est pas une</p></li></ul></div></section><section id="_cela_sert__quoi"><h2>Cela sert à quoi ?</h2><div class="ulist"><ul><li class="fragment"><p>Destiné à traiter efficacement de petits ou grands lots de données</p></li><li class="fragment"><p>Efficace car on peut effectuer des traitements en parralléle sans écrire de code technique</p></li><li class="fragment"><p>Pipeline : toutes les données ne sont traités qu&#8217;une seule fois et cela évite les calculs intermédiaires</p></li></ul></div></section><section id="_au_final_c_est_quoi_une_stream"><h2>Au final , c&#8217;est quoi une stream ?</h2><div class="ulist"><ul><li class="fragment"><p>Un objet dans lequel on peut définir des opérations</p></li><li class="fragment"><p>Un objet qui ne posséde pas de données (A REVOIR)</p></li><li class="fragment"><p>Un objet qui ne doit pas changer de données qu&#8217;il traite</p></li><li class="fragment"><p>Un objet capable de traiter les données en une seule traite</p></li><li class="fragment"><p>Les Stream sont différents de l&#8217;API Collection car on voulait introduire de nouveaux concepts sans faire évoluer l&#8217;API collections</p></li></ul></div></section></section>
-<section><section id="_syntaxe"><h2>Syntaxe</h2></section><section id="_comment_construire_une_stream"><h2>Comment construire une stream ?</h2><div class="paragraph"><p>Le plus simple est la méthode "streams" sur collections</p></div>
-<div class="paragraph"><p>TODO Insert code</p></div></section><section id="_comment_construire_une_stream_2"><h2>Comment construire une stream ?</h2><div class="paragraph"><p>On peut utiliser également of</p></div>
-<div class="paragraph"><p>TODO Insert code</p></div></section><section id="_premire_opration_foreach"><h2>Premiére opération : forEach</h2><div class="paragraph"><p>forEach effectue une action pour chaque élément du stream.
+<div class="ulist"><ul><li><p>Un nouveau concept : cela ressemble à une collection mais ce n&#8217;en est pas une</p></li></ul></div></section><section id="_cela_sert__quoi"><h2>Cela sert à quoi ?</h2><div class="ulist"><ul><li class="fragment"><p>Destiné à traiter efficacement de petits ou grands lots de données</p></li><li class="fragment"><p>Efficace car on peut effectuer des traitements en paralléle sans écrire de code technique</p></li><li class="fragment"><p>Pipeline : toutes les données ne sont traités qu&#8217;une seule fois et cela évite les calculs intermédiaires</p></li></ul></div></section><section id="_au_final_c_est_quoi_une_stream"><h2>Au final , c&#8217;est quoi une stream ?</h2><div class="ulist"><ul><li class="fragment"><p>Un objet dans lequel on peut définir des opérations</p></li><li class="fragment"><p>Un objet qui ne contient pas de données</p></li><li class="fragment"><p>Un objet qui ne doit pas changer de données qu&#8217;il traite</p></li><li class="fragment"><p>Un objet capable de traiter les données en une seule traite</p></li><li class="fragment"><p>Les Stream sont différents de l&#8217;API Collection car on voulait introduire de nouveaux concepts sans faire évoluer l&#8217;API collections</p></li></ul></div></section></section>
+<section><section id="_syntaxe"><h2>Syntaxe</h2></section><section id="_comment_construire_une_stream"><h2>Comment construire une stream ?</h2><div class="paragraph"><p>Via la méthode "streams" sur l&#8217;API collection</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;Personne&gt; personnes=Arrays.asList(p1,p2,p3);
+
+Stream&lt;Personne&gt; s=personnes.stream();</code></pre></div></div></section><section id="_comment_construire_une_stream_2"><h2>Comment construire une stream ?</h2><div class="paragraph"><p>On peut également utiliser la méthode Stream.of</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Stream&lt;Personne&gt; s=Stream.of(p1,p2,p3);</code></pre></div></div></section><section id="_premire_opration_foreach"><h2>Premiére opération : forEach</h2><div class="paragraph"><p>forEach effectue une action pour chaque élément du stream.
 Prend en paramétre un Consumer.
 Ne retourne rien</p></div>
-<div class="paragraph"><p>TODO Insert code</p></div></section></section>
-<section><section id="_if_consumer"><h2>IF : consumer</h2><div class="paragraph"><p>TODO Insert javadoc</p></div><div class="paragraph"><p>TODO Insert code</p></div><div class="paragraph"><p>on peut chainer plusieurs Consumer avec la méthode abstraite andThen</p></div></section><section id="_deuxime_opration_filter"><h2>Deuxiéme opération : filter</h2><div class="paragraph"><p>La méthode filter permet de filtrer les éléments d&#8217;une stream.
-Prend en paramétre un prédicat.</p></div>
-<div class="paragraph"><p>TODO Insert code</p></div>
-<div class="paragraph"><p>Filter retourne une stream</p></div></section></section>
-<section><section id="_if_predicat"><h2>IF : Predicat</h2><div class="paragraph"><p>TODO Insert javadoc</p></div><div class="paragraph"><p>TODO Insert code</p></div><div class="paragraph"><p>on peut chainer plusieurs Consumer avec des méthodes abstraites &#8230;&#8203; (ATTENTION les opérations sont appliqués de gauche à droite et non suivante l&#8217;ordre mathématique)</p></div></section><section id="_dmo"><h2>Démo</h2></section><section id="_exemple_de_map_filter_reduce_2"><h2>Exemple de Map / Filter / Reduce</h2><div class="paragraph"><p>Exemple : On veut calculer la moyenne d&#8217;age d&#8217;une liste de personnes dont l&#8217;age est supérieur à 20 ans</p></div></section><section id="_1re_tape_map_2"><h2>1ére étape : Map</h2><div class="paragraph"><p>Prend en entrée la liste de personnes et renvoi une liste d&#8217;age (entier)</p></div></section><section id="_2me_tape_filter_2"><h2>2éme étape : Filter</h2><div class="paragraph"><p>Filtre dans la liste d&#8217;age , les éléments supérieurs à 20.</p></div></section><section id="_3me_tape_reduce_2"><h2>3éme étape : Reduce</h2><div class="paragraph"><p>Equivalent à une agrégation SQL.</p></div>
-<div class="paragraph"><p>Renvoie la moyenne des élements supérieur à 20.</p></div></section><section id="_implmentation_avec_une_classe_concrte"><h2>Implémentation avec une classe concréte</h2><div class="listingblock"><div class="title">Implémentation</div><div class="content"><pre class="highlight"><code class="java language-java">public class FileFilterJava implements FileFilter{
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-}</code></pre></div></div>
-<div class="listingblock"><div class="title">Exemple d&#8217;appel</div><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilterJava();
-File repertoire=new File("c:\\temp");
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">void forEach(Consumer&lt;? super T&gt; action);</code></pre></div></div></section><section id="_un_exemple_avec_foreach"><h2>Un exemple avec forEach</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;Personne&gt; personnes=Arrays.asList(p1,p2,p3);
 
-for(File f:repertoire.listFiles(fileFilterJava))
-	System.out.println(f);</code></pre></div></div></section><section id="_implmentation_avec_une_classe_anonyme"><h2>Implémentation avec une classe anonyme</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilter() {
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-};
+Stream&lt;Personne&gt; s=personnes.stream();
 
-File repertoire=new File("c:\\temp");
-
-for(File f:repertoire.listFiles(fileFilterJava))
-	System.out.println(f);</code></pre></div></div></section><section id="_classe_concrte_vs_anonyme"><h2>Classe concréte VS anonyme</h2><div class="ulist"><ul><li class="fragment"><p>Avec les classes concrètes tout le code n&#8217;est pas au même endroit, ce qui nuit à la bonne compréhension du code</p></li><li class="fragment"><p>Avec les classes anonymes on s’encombre de code technique ce qui nuit à la clarté du code</p></li></ul></div></section><section id="_comment_crire_une_lambda"><h2>Comment écrire une lambda ?</h2><div class="paragraph"><p>On se base sur la déclaration de la classe anonyme :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilter() {
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-};</code></pre></div></div>
-<div class="paragraph"><p>1 - On récupére les paramétres de la méthode :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter filter=(File pathname)</code></pre></div></div></section><section id="_comment_crire_une_lambda_2"><h2>Comment écrire une lambda ?</h2><div class="paragraph"><p>On se base sur la déclaration de la classe anonyme :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilter() {
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-};</code></pre></div></div>
-<div class="paragraph"><p>2 - On ajoute l&#8217;opérateur "&#8594;" :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter filter=(File pathname)-&gt;</code></pre></div></div></section><section id="_comment_crire_une_lambda_3"><h2>Comment écrire une lambda ?</h2><div class="paragraph"><p>On se base sur la déclaration de la classe anonyme :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter fileFilterJava=new FileFilter() {
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-};</code></pre></div></div>
-<div class="paragraph"><p>3 - On rajoute le code de la méthode :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">FileFilter filter=(File pathname)-&gt;pathname.getName().endsWith(".java");</code></pre></div></div></section><section id="_conclusion"><h2>Conclusion</h2><div class="ulist"><ul><li class="fragment"><p>Les lambdas sont juste une nouvelle façon d&#8217;écrire les classes anonymes</p></li><li class="fragment"><p>Cela permet  d&#8217;écrire des instances de classes anonymes plus facile à lire et à écrire</p></li></ul></div></section></section>
-<section><section id="_dmo_2"><h2>Démo</h2></section><section id="_conclusion_2"><h2>Conclusion</h2><div class="ulist"><ul><li class="fragment"><p>Quand on a plusieurs lignes de codes dans la lambda , on utilise les accolades</p></li><li class="fragment"><p>Une lambda , peut prendre de 0 à n paramètres</p></li></ul></div></section></section>
-<section><section id="_interface_fonctionnel"><h2>Interface fonctionnel</h2></section><section id="_quel_est_le_type_des_lambdas"><h2>Quel est le type des lambdas ?</h2><div class="paragraph"><p>Les lambdas sont de type "interface fonctionnel" ou "functional interface" en anglais</p></div></section><section id="_une_interface_fonctionnel_c_est_quoi"><h2>Une interface fonctionnel c&#8217;est quoi ?</h2><div class="paragraph"><p>Une interface avec une méthode abstraite unique (les méthodes d&#8217;Object ne comptent pas)</p></div>
-<div class="paragraph"><p>Exemple :</p></div>
+s.forEach(p-&gt;System.out.println(p));</code></pre></div></div></section></section>
+<section id="_if_consumer"><h2>IF : Consumer</h2><div class="paragraph"><p>Consumer est une interface fonctionnelle :</p></div>
 <div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface Consumer&lt;T&gt; {
+
+void accept(T t);
+...</code></pre></div></div>
+<div class="paragraph"><p>Peux être implémenté par une lambda :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">p-&gt;System.out.println(p)
+System.out::println //Référence de méthode</code></pre></div></div></section>
+<section id="_comment_chainer_plusieurs_consumers"><h2>Comment chainer plusieurs Consumers</h2><div class="paragraph"><p>Comment peut on enchainer plusieurs Consumers sachant que la méthode forEach ne retourne rien ?</p></div></section>
+<section><section id="_comment_chainer_plusieurs_consumers_2"><h2>Comment chainer plusieurs Consumers</h2><div class="paragraph"><p>Grace aux méthodes abstraites de Consumer:</p></div><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Stream&lt;Personne&gt; s=personnes.stream();
+
+Consumer&lt;Personne&gt; consNom=(p-&gt;System.out.println(p.getNom()));
+Consumer&lt;Personne&gt; consAge=(p-&gt;System.out.println(p.getAge()));
+
+s.forEach(consNom.andThen(consAge));</code></pre></div></div></section><section id="_deuxime_opration_filter"><h2>Deuxiéme opération : filter</h2><div class="paragraph"><p>La méthode filter permet de filtrer les éléments d&#8217;une stream.
+Elle prend en paramétre un prédicat.</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;Personne&gt; personnes=Arrays.asList(p1,p2,p3);
+
+Stream&lt;Personne&gt; s=personnes.stream();
+
+s.filter(p-&gt;p.getAge()&gt;20)</code></pre></div></div></section></section>
+<section id="_if_predicat"><h2>IF : Predicat</h2><div class="paragraph"><p>Consumer est une interface fonctionnelle :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface Predicate&lt;T&gt; {
+
+boolean test(T t);
+...</code></pre></div></div>
+<div class="paragraph"><p>Peux être implémenté par une lambda :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">p-&gt;p.getAge()&gt;20</code></pre></div></div></section>
+<section><section id="_comment_chainer_plusieurs_predicates"><h2>Comment chainer plusieurs Predicates</h2><div class="paragraph"><p>Comment peut on enchainer plusieurs Consumers sachant que la méthode forEach ne retourne rien ?</p></div><div class="paragraph"><p>on peut chainer plusieurs Consumer avec les méthodes abstraites suivantes :</p></div><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">default Predicate&lt;T&gt; and(Predicate&lt;? super T&gt; other) {... ]
+default Predicate&lt;T&gt; negate() { ... }
+default Predicate&lt;T&gt; or(Predicate&lt;? super T&gt; other) { ... }</code></pre></div></div><div class="paragraph"><p>(ATTENTION les opérations sont appliqués de gauche à droite et non suivante l&#8217;ordre mathématique)</p></div><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">s.filter(nomCommencantParA.or(ageSup20.and(ageInf60)));// (nomCommencantParA OR ageSup20) AND ageInf60</code></pre></div></div></section><section id="_dmo"><h2>Démo</h2></section><section id="_exemple_de_map_filter_reduce_2"><h2>Exemple de Map / Filter / Reduce</h2><div class="paragraph"><p>Exemple : On veut calculer la moyenne d&#8217;age d&#8217;une liste de personnes dont l&#8217;age est supérieur à 20 ans</p></div></section><section id="_1re_tape_map_2"><h2>1ére étape : Map</h2><div class="paragraph"><p>Prend en entrée la liste de personnes et renvoi une liste d&#8217;age (entier)</p></div></section><section id="_2me_tape_filter_2"><h2>2éme étape : Filter</h2><div class="paragraph"><p>Filtre dans la liste d&#8217;age , les éléments supérieurs à 20.</p></div></section><section id="_3me_tape_reduce_2"><h2>3éme étape : Reduce</h2><div class="paragraph"><p>Equivalent à une agrégation SQL.</p></div>
+<div class="paragraph"><p>Renvoie la moyenne des élements supérieur à 20.</p></div></section><section id="_lazy_operation"><h2>Lazy Operation</h2><div class="paragraph"><p>Que fait la méthode filter ?</p></div>
+<div class="ulist"><ul><li class="fragment"><p>Elle retourne les streams avec des données triées</p></li><li class="fragment"><p>FAUX &#8658; Un Stream ne contient pas de données.</p></li></ul></div></section></section>
+<section id="_que_fait_la_mthode_filter"><h2>Que fait la méthode filter ?</h2><div class="paragraph"><p>Un filter ne fait rien, il s&#8217;agit juste d&#8217;une déclaration</p></div>
+<div class="paragraph"><p>Toutes les méthodes qui retournent un Stream sont Lazy</p></div></section>
+<section id="_type_de_mthode_stream"><h2>Type de méthode Stream</h2><div class="paragraph"><p>Une méthode qui retourne un Stream est appellé opération intermédiaire</p></div>
+<div class="paragraph"><p>Les autres opérations sont appellés finales</p></div></section>
+<section id="_mthode_peek"><h2>Méthode peek</h2><div class="paragraph"><p>Elle est identique à forEach mais il s&#8217;agit d&#8217;une opération intermédiarie</p></div></section>
+<section><section id="_dmo_2"><h2>Démo</h2></section><section id="_map_operation"><h2>Map Operation</h2><div class="paragraph"><p>Exemple :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">...
+Stream&lt;Personne&gt; s=Arrays.asList(p1,p2,p3).stream();
+s.map(p-&gt;p.getNom());
+...</code></pre></div></div>
+<div class="ulist"><ul><li class="fragment"><p>Map est une opération intermédiaire</p></li><li class="fragment"><p>Prend une Function en paramétre</p></li></ul></div></section></section>
+<section id="_if_function"><h2>IF : Function</h2><div class="paragraph"><p>Consumer est une interface fonctionnelle :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public interface Function&lt;T, R&gt; {
+
+R apply(T t);
+
+...</code></pre></div></div></section>
+<section id="_operation_flatmap"><h2>Operation flatMap</h2><div class="paragraph"><p>C’est une opération intermédiraire qui permet de mettre à plat un Stream.
+On peut par exemple transformer un Stream&lt;List&lt;Personne&gt;&gt; en Stream&lt;Personne&gt;</p></div></section>
+<section id="_dmo_3"><h2>Démo</h2></section>
+<section id="_etape_reduce"><h2>Etape : Reduce</h2><div class="paragraph"><p>Le premier type d&#8217;agrégation : min , max , &#8230;&#8203;</p></div></section>
+<section id="_etape_reduce_2"><h2>Etape : Reduce</h2><div class="paragraph"><p>Exemple :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;Integer&gt; nbs=Arrays.asList(2,1,4);
+System.out.println(nbs.stream().reduce(0,((i1,i2) -&gt; i1+i2)));</code></pre></div></div>
+<div class="ulist"><ul><li class="fragment"><p>Premier argument : "identity element" de l&#8217;opération de réduction</p></li><li class="fragment"><p>Second argument : opération de réduction de type BinaryOperator&lt;T&gt;</p></li></ul></div></section>
+<section id="_if_binaryoperator"><h2>IF : BinaryOperator</h2><div class="paragraph"><p>BinaryOperator est une BiFunction particuliére :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface BiFunction&lt;T, U, R&gt; {
+
+R apply(T t, U u);
+
+...</code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+public interface BinaryOperator&lt;T&gt; extends BiFunction&lt;T,T,T&gt; {
+...</code></pre></div></div></section>
+<section id="_identity_element"><h2>Identity Element</h2><div class="paragraph"><p>La bifunction prends 2 éléments</p></div>
+<div class="ulist"><ul><li><p>Que se passe t&#8217;il quand la stream est vide ?</p></li><li><p>Que se passe t&#8217;il quand la stream contient qu&#8217;un seul élément ?</p></li></ul></div>
+<div class="ulist"><ul><li class="fragment"><p>La "reduction" d&#8217;un Stream vide retourne l'"identity element"</p></li><li class="fragment"><p>Si le Stream ne contient qu&#8217;un seul élément, alors la réduction correspond à cet élément</p></li></ul></div></section>
+<section id="_reduction_autres_cas"><h2>Reduction : autres cas</h2><div class="paragraph"><p>Prenons la méthode de reduction "max" :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;Integer&gt; nbs=Arrays.asList(2,1,4);
+
+nbs.stream().max(((i1,i2) -&gt; i1+i2));
+...
+[%step]
+* Le problème est qu'il n'y a pas d'"identity element" pour l'opération max
+* Donc le max d'un Stream vide n'est pas défini ...
+
+== Reduction : max
+
+Quel est le type de retour de cet appel ? :
+
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>List&lt;Integer&gt; nbs=Arrays.asList(2,1,4);</p></div>
+<div class="olist lowerroman"><ol class="lowerroman" type="i"><li><p>result=nbs.stream().max(Comparator.naturalOrder());</p></li></ol></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>[%step]
+* Si le type de retour est int alors la valeur par défaut est 0
+* Si le type de retour est Integer alors la valeur par défaut est null
+* Le type de retour est Optional&lt;Integer&gt;
+
+
+== Optionals
+
+- Optionals est un wrapper
+- Optionals veut dire "Qu'il n'y a peut être pas de résultat"
+
+
+== Optionals
+
+Comment se sert on d'un optional ?
+- La méthode isPresent() retourne true s'il y a quelque chose dans l'optionals
+- La méthode get() retourne la valeur
+
+
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>Optional&lt;Integer&gt; result=nbs.stream().max(Comparator.naturalOrder());
+if(result.isPresent())
+	System.out.println(result.get());
+else
+	System.out.println("Pas de résultat");
+&#8230;&#8203;</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>== Collectors
+
+Il y a un autre type de réduction les "collectors"
+
+A la place d'aggréger les éléments ,on les met dans un conteneur
+
+
+=== Collectors avec une String
+
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>&#8230;&#8203;
+List&lt;Personne&gt; personnes=Arrays.asList(p1,p2,p3);</p></div>
+<div class="paragraph"><p>String res=personnes.stream().filter(p&#8594;p.getAge()&gt;20)
+	.map(p&#8594;p.getNom())
+	.collect(Collectors.joining(","));</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Collectors avec une List
+
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>&#8230;&#8203;
+List&lt;Personne&gt; personnes=Arrays.asList(p1,p2,p3);</p></div>
+<div class="paragraph"><p>String res=personnes.stream().filter(p&#8594;p.getAge()&gt;20)
+	.map(p&#8594;p.getNom())
+	.collect(Collectors.toList());</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Implémentation avec une classe concréte
+[{stepwise}]
+
+.Implémentation
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>public class FileFilterJava implements FileFilter{
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+}</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>.Exemple d'appel
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>FileFilter fileFilterJava=new FileFilterJava();
+File repertoire=new File("c:\\temp");</p></div>
+<div class="paragraph"><p>for(File f:repertoire.listFiles(fileFilterJava))
+	System.out.println(f);</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Implémentation avec une classe anonyme
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>FileFilter fileFilterJava=new FileFilter() {
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};</p></div>
+<div class="paragraph"><p>File repertoire=new File("c:\\temp");</p></div>
+<div class="paragraph"><p>for(File f:repertoire.listFiles(fileFilterJava))
+	System.out.println(f);</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Classe concréte VS anonyme
+
+[%step]
+* Avec les classes concrètes tout le code n'est pas au même endroit, ce qui nuit à la bonne compréhension du code
+* Avec les classes anonymes on s’encombre de code technique ce qui nuit à la clarté du code
+
+=== Comment écrire une lambda ?
+On se base sur la déclaration de la classe anonyme :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>FileFilter fileFilterJava=new FileFilter() {
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>1 - On récupére les paramétres de la méthode :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>FileFilter filter=(File pathname)</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Comment écrire une lambda ?
+On se base sur la déclaration de la classe anonyme :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>FileFilter fileFilterJava=new FileFilter() {
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>2 - On ajoute l'opérateur "-&gt;" :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>FileFilter filter=(File pathname)&#8594;</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Comment écrire une lambda ?
+On se base sur la déclaration de la classe anonyme :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>FileFilter fileFilterJava=new FileFilter() {
+	@Override
+	public boolean accept(File pathname) {
+		return pathname.getName().endsWith(".java");
+	}
+};</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>3 - On rajoute le code de la méthode :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>FileFilter filter=(File pathname)&#8594;pathname.getName().endsWith(".java");</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Conclusion
+
+[%step]
+* Les lambdas sont juste une nouvelle façon d'écrire les classes anonymes
+* Cela permet  d'écrire des instances de classes anonymes plus facile à lire et à écrire
+
+
+== Démo
+
+=== Conclusion
+
+[%step]
+* Quand on a plusieurs lignes de codes dans la lambda , on utilise les accolades
+* Une lambda , peut prendre de 0 à n paramètres
+
+
+== Interface fonctionnel
+
+=== Quel est le type des lambdas ?
+
+Les lambdas sont de type "interface fonctionnel" ou "functional interface" en anglais
+
+=== Une interface fonctionnel c'est quoi ?
+
+Une interface avec une méthode abstraite unique (les méthodes d'Object ne comptent pas)
+
+Exemple :
+
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>@FunctionalInterface
 public interface Comparator&lt;T&gt; {
     int compare(T o1, T o2);
 	boolean equals(Object obj);
-}</code></pre></div></div></section><section id="_l_annotation_functionalinterface"><h2>L&#8217;annotation @FunctionalInterface</h2><div class="paragraph"><p>L&#8217;annotation @FunctionalInterface est optionnelle.</p></div>
-<div class="paragraph"><p>Elle sert uniquement au moment de la compilation , le compilateur indique une erreur si l&#8217;interface annotée ne correspond pas à une interface fonctionnelle.</p></div></section><section id="_dmo_3"><h2>Démo</h2></section><section id="_conclusion_3"><h2>Conclusion</h2><div class="ulist"><ul><li class="fragment"><p>Les lambdas sont de type "interface fonctionnel"</p></li><li class="fragment"><p>Une interface fonctionnel c&#8217;est une interface avec une méthode abstraite unique</p></li><li class="fragment"><p>L&#8217;interface @FunctionalInterface est optionnelle</p></li></ul></div></section></section>
-<section><section id="_la_boite__outils_functionnel_interface"><h2>La boite à outils Functionnel interface</h2></section><section id="_la_boite__outils_functionnel_interface_2"><h2>La boite à outils Functionnel interface</h2><div class="ulist"><ul><li><p>Dans le package java.util.function</p></li><li><p>43 nouvelles interfaces</p></li><li><p>Divisée en 4 catégories</p></li></ul></div></section><section id="_supplier"><h2>Supplier</h2><div class="paragraph"><p>Supplier ou fournisseur ne prend aucun objet en paramètre et en renvoie un.</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
-public interface Supplier&lt;T&gt; {
+}</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== L'annotation @FunctionalInterface
 
-    T get();
-}</code></pre></div></div></section><section id="_consumer"><h2>Consumer</h2><div class="paragraph"><p>Consumer ou consommateur prend un objet en paramètre et ne renvoie rien.</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+L'annotation @FunctionalInterface est optionnelle.
+
+Elle sert uniquement au moment de la compilation , le compilateur indique une erreur si l'interface annotée ne correspond pas à une interface fonctionnelle.
+
+
+=== Démo
+
+=== Conclusion
+
+[%step]
+* Les lambdas sont de type "interface fonctionnel"
+* Une interface fonctionnel c'est une interface avec une méthode abstraite unique
+* L'interface @FunctionalInterface est optionnelle
+
+
+
+== La boite à outils Functionnel interface
+
+
+=== La boite à outils Functionnel interface
+- Dans le package java.util.function
+- 43 nouvelles interfaces
+- Divisée en 4 catégories
+
+=== Supplier
+
+Supplier ou fournisseur ne prend aucun objet en paramètre et en renvoie un.
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>@FunctionalInterface
+public interface Supplier&lt;T&gt; {</p></div>
+<div class="literalblock"><div class="content"><pre>    T get();
+}</pre></div></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Consumer
+
+Consumer ou consommateur prend un objet en paramètre et ne renvoie rien.
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>@FunctionalInterface
 public interface Consumer&lt;T&gt; {
     void accept(T t);
-}</code></pre></div></div></section><section id="_function"><h2>Function</h2><div class="paragraph"><p>Function ou fonction prend un objet en paramètre et en renvoie un de type différent</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public interface Function&lt;T, R&gt; {
+}</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Function
 
-    R apply(T t);
-}</code></pre></div></div></section><section id="_unaryoperator"><h2>UnaryOperator</h2><div class="paragraph"><p>UnaryOperator est une Function spécifique , qui prend un objet en paramètre et renvoie objet du même type que le paramètre.</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+Function ou fonction prend un objet en paramètre et en renvoie un de type différent
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>public interface Function&lt;T, R&gt; {</p></div>
+<div class="literalblock"><div class="content"><pre>    R apply(T t);
+}</pre></div></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== UnaryOperator
+
+UnaryOperator est une Function spécifique , qui prend un objet en paramètre et renvoie objet du même type que le paramètre.
+
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>@FunctionalInterface
 public interface UnaryOperator&lt;T&gt; extends Function&lt;T, T&gt; {
 	T apply(T t);
-}</code></pre></div></div></section><section id="_les_variantes"><h2>Les variantes</h2><div class="paragraph"><p>Il existe de nombreuse variantes dans les 4 catégories , comme celles qui prennent plusieurs objet en entrée.
-Exemple : BiConsumer ou BiPredicate</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+}</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Les variantes
+
+Il existe de nombreuse variantes dans les 4 catégories , comme celles qui prennent plusieurs objet en entrée.
+Exemple : BiConsumer ou BiPredicate
+
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>@FunctionalInterface
 public interface BiConsumer&lt;T, U&gt; {
     void accept(T t, U u);
-}</code></pre></div></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
+}</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>[source,java]</code></pre></div></div>
+<div class="paragraph"><p>@FunctionalInterface
 public interface BiPredicate&lt;T, U&gt; {
     boolean test(T t, U u);
-}</code></pre></div></div></section></section>
-<section><section id="_syntaxe_avance_pour_les_lambdas"><h2>Syntaxe avancée pour les lambdas</h2></section><section id="_les_paramtres"><h2>Les paramètres</h2><div class="paragraph"><p>On n&#8217;a pas besoin de préciser le type des paramétres :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Comparator&lt;Integer&gt; c=(Integer i1, Integer i2)-&gt;Integer.compare(i1, i2);</code></pre></div></div>
-<div class="paragraph"><p>devient :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Comparator&lt;Integer&gt; c=(i1,i2)-&gt;Integer.compare(i1, i2);</code></pre></div></div></section><section id="_les_rfrences_de_mthodes"><h2>Les références de méthodes</h2><div class="paragraph"><p>Quand on a qu&#8217;un seul appel de méthode on peut utiliser l&#8217;opérateur "::"</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Consumer&lt;String&gt; consumerPrint=s-&gt;System.out.println(s);</code></pre></div></div>
-<div class="paragraph"><p>devient :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Consumer&lt;String&gt; consumerPrint=System.out::println;</code></pre></div></div></section><section id="_les_rfrences_de_mthodes_2"><h2>Les références de méthodes</h2><div class="paragraph"><p>Autre exemple</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Comparator&lt;Integer&gt; c=(Integer i1, Integer i2)-&gt;Integer.compare(i1, i2);</code></pre></div></div>
-<div class="paragraph"><p>devient :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Comparator&lt;Integer&gt; c=Integer::compare;</code></pre></div></div></section><section id="_conclusion_4"><h2>Conclusion</h2><div class="ulist"><ul><li class="fragment"><p>On n&#8217;a pas besoin de préciser le type des paramétres dans les lambdas</p></li><li class="fragment"><p>Quand on a qu&#8217;un seul appel de méthode (statique ou non) on peut utiliser l&#8217;opérateur "::"</p></li></ul></div></section><section id="_dmo_4"><h2>Démo</h2></section></section>
-<section><section id="_les_lambdas_cela_sert__quoi"><h2>Les lambdas , cela sert à quoi ?</h2></section><section id="_dmo_5"><h2>Démo</h2></section></section>
-<section><section id="_une_lambda_est_elle_un_objet"><h2>Une lambda est elle un objet ?</h2></section><section id="_une_lambda_est_elle_un_objet_2"><h2>Une lambda est elle un objet ?</h2><div class="ulist"><ul><li><p>Non , il s&#8217;agit d&#8217;un nouveau type (objet sans identité)</p></li><li><p>Plus rapide que la création d&#8217;une classe anonyme</p></li><li><p>Pas besoin de redéfinir les méthodes d&#8217;object</p></li></ul></div></section></section>
-<section><section id="_mthodes_par_dfaut_dans_les_interfaces"><h2>Méthodes par défaut dans les interfaces</h2></section><section id="_mthodes_par_dfaut_dans_les_interfaces_2"><h2>Méthodes par défaut dans les interfaces</h2><div class="paragraph"><p>Depuis java 8 , on peut définir une implémentation par défaut à une méthode.
-Mais à quoi cela sert il ?</p></div></section><section id="_mthodes_par_dfaut_dans_les_interfaces_3"><h2>Méthodes par défaut dans les interfaces</h2><div class="paragraph"><p>Cela permet de rajouter de nouvelles méthodes sans casser les contrats d&#8217;interface existants :</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public interface Iterable&lt;T&gt; {
+}</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>== Syntaxe avancée pour les lambdas
 
-    Iterator&lt;T&gt; iterator();
+=== Les paramètres
 
-    default void forEach(Consumer&lt;? super T&gt; action) {
+On n'a pas besoin de préciser le type des paramétres :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>Comparator&lt;Integer&gt; c=(Integer i1, Integer i2)&#8594;Integer.compare(i1, i2);</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>devient :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>Comparator&lt;Integer&gt; c=(i1,i2)&#8594;Integer.compare(i1, i2);</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Les références de méthodes
+
+Quand on a qu'un seul appel de méthode on peut utiliser l'opérateur "::"
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>Consumer&lt;String&gt; consumerPrint=s&#8594;System.out.println(s);</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>devient :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>Consumer&lt;String&gt; consumerPrint=System.out::println;</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Les références de méthodes
+
+Autre exemple
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>Comparator&lt;Integer&gt; c=(Integer i1, Integer i2)&#8594;Integer.compare(i1, i2);</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>devient :
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>Comparator&lt;Integer&gt; c=Integer::compare;</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Conclusion
+
+[%step]
+* On n'a pas besoin de préciser le type des paramétres dans les lambdas
+* Quand on a qu'un seul appel de méthode (statique ou non) on peut utiliser l'opérateur "::"
+
+=== Démo
+
+
+== Les lambdas , cela sert à quoi ?
+
+=== Démo
+
+
+== Une lambda est elle un objet ?
+
+=== Une lambda est elle un objet ?
+- Non , il s'agit d'un nouveau type (objet sans identité)
+- Plus rapide que la création d'une classe anonyme
+- Pas besoin de redéfinir les méthodes d'object
+
+== Méthodes par défaut dans les interfaces
+
+=== Méthodes par défaut dans les interfaces
+Depuis java 8 , on peut définir une implémentation par défaut à une méthode.
+Mais à quoi cela sert il ?
+
+=== Méthodes par défaut dans les interfaces
+Cela permet de rajouter de nouvelles méthodes sans casser les contrats d'interface existants :
+
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>public interface Iterable&lt;T&gt; {</p></div>
+<div class="literalblock"><div class="content"><pre>Iterator&lt;T&gt; iterator();</pre></div></div>
+<div class="literalblock"><div class="content"><pre>    default void forEach(Consumer&lt;? super T&gt; action) {
         Objects.requireNonNull(action);
         for (T t : this) {
             action.accept(t);
         }
     }
-}</code></pre></div></div></section><section id="_mthodes_par_dfaut_dans_les_interfaces_4"><h2>Méthodes par défaut dans les interfaces</h2><div class="paragraph"><p>Cela permet de rajouter de nouvelles possibilités aux interfaces fonctionnels</p></div>
-<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@FunctionalInterface
-public interface Predicate&lt;T&gt; {
+}</pre></div></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Méthodes par défaut dans les interfaces
+Cela permet de rajouter de nouvelles possibilités aux interfaces fonctionnels
 
-    boolean test(T t);
-
-    default Predicate&lt;T&gt; and(Predicate&lt;? super T&gt; other) {
+[source,java]</code></pre></div></div>
+<div class="paragraph"><p>@FunctionalInterface
+public interface Predicate&lt;T&gt; {</p></div>
+<div class="literalblock"><div class="content"><pre>boolean test(T t);</pre></div></div>
+<div class="literalblock"><div class="content"><pre>    default Predicate&lt;T&gt; and(Predicate&lt;? super T&gt; other) {
         Objects.requireNonNull(other);
         return (t) -&gt; test(t) &amp;&amp; other.test(t);
     }
-}</code></pre></div></div></section><section id="_dmo_6"><h2>Démo</h2></section></section>
-<section id="_des_questions"><h2>Des questions ?</h2></section>
-<section id="_donc_passionn_et_fier_de_l_tre"><h2>DONC, passionné et fier de l&#8217;être ?</h2><div class="paragraph"><p><span class="image"><img src="images/StarTECH-Java_we-want-you.png" alt="StarTECH Java we want you" width="400"></span></p></div>
-<div class="paragraph"><p>Rejoins-nous !<br>
-<a href="mailto:startech-java@softeam.fr?subject=Inscription%20au%20StarTECH%20Java%20!&amp;body=Java%20roxxe%20!%0AJe%20veux%20contribuer%2C%20et%20souhaite%20rejoindre%20le%20groupe.%0A%0AEl%C3%A9ments%20%C3%A0%20fournir%20pour%20le%20trombinoscope%20%3A%0ANom%20et%20pr%C3%A9nom%20%3A%20XXX%0ACourte%20description%20%3A%20qui%20je%20suis%2C%20ce%20que%20j&#8217;aime%2C%20les%20techno%20dont%20je%20suis%20fan%2C%20etc.%0A%0AJ&#8217;ai%20bien%20lu%20le%20manifeste%2C%20et%20suis%20en%20accord%20avec%20les%20valeurs%20qu&#8217;il%20d%C3%A9fend.%0A">Inscription au StarTECH Java</a></p></div></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+}</pre></div></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>=== Démo
+
+== Des questions ?
+
+== DONC, passionné et fier de l'être ?
+
+image:StarTECH-Java_we-want-you.png[width=400]
+
+Rejoins-nous ! +
+mailto:startech-java@softeam.fr?subject=Inscription%20au%20StarTECH%20Java%20!&amp;amp;body=Java%20roxxe%20!%0AJe%20veux%20contribuer%2C%20et%20souhaite%20rejoindre%20le%20groupe.%0A%0AEl%C3%A9ments%20%C3%A0%20fournir%20pour%20le%20trombinoscope%20%3A%0ANom%20et%20pr%C3%A9nom%20%3A%20XXX%0ACourte%20description%20%3A%20qui%20je%20suis%2C%20ce%20que%20j'aime%2C%20les%20techno%20dont%20je%20suis%20fan%2C%20etc.%0A%0AJ'ai%20bien%20lu%20le%20manifeste%2C%20et%20suis%20en%20accord%20avec%20les%20valeurs%20qu'il%20d%C3%A9fend.%0A[Inscription au StarTECH Java]</code></pre></div></div></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
 Reveal.initialize({
   // Display controls in the bottom right corner
   controls: true,

@@ -242,9 +242,213 @@ Renvoie la moyenne des élements supérieur à 20.
 
 
 
+=== Lazy Operation
+
+Que fait la méthode filter ?
+
+[%step]
+* Elle retourne les streams avec des données triées
+* FAUX => Un Stream ne contient pas de données.
+
+== Que fait la méthode filter ?
+Un filter ne fait rien, il s'agit juste d'une déclaration
+
+Toutes les méthodes qui retournent un Stream sont Lazy
+
+
+== Type de méthode Stream
+
+Une méthode qui retourne un Stream est appellé opération intermédiaire
+
+Les autres opérations sont appellés finales
+
+== Méthode peek
+
+Elle est identique à forEach mais il s'agit d'une opération intermédiarie
+
+== Démo
 
 
 
+=== Map Operation
+
+Exemple : 
+[source,java]
+----
+...
+Stream<Personne> s=Arrays.asList(p1,p2,p3).stream();
+s.map(p->p.getNom());
+...
+----		
+
+[%step]
+* Map est une opération intermédiaire
+* Prend une Function en paramétre
+		
+
+== IF : Function
+
+Consumer est une interface fonctionnelle : 
+[source,java]
+----
+public interface Function<T, R> {
+
+R apply(T t);
+
+...
+
+----
+
+== Operation flatMap
+C’est une opération intermédiraire qui permet de mettre à plat un Stream.
+On peut par exemple transformer un Stream<List<Personne>> en Stream<Personne> 
+
+== Démo
+
+
+
+== Etape : Reduce
+
+Le premier type d'agrégation : min , max , ...
+
+
+
+== Etape : Reduce
+
+Exemple : 
+
+[source,java]
+----
+List<Integer> nbs=Arrays.asList(2,1,4);
+System.out.println(nbs.stream().reduce(0,((i1,i2) -> i1+i2)));
+----			
+
+[%step]
+* Premier argument : "identity element" de l'opération de réduction
+* Second argument : opération de réduction de type BinaryOperator<T>
+
+
+== IF : BinaryOperator
+
+BinaryOperator est une BiFunction particuliére : 
+[source,java]
+----
+@FunctionalInterface
+public interface BiFunction<T, U, R> {
+
+R apply(T t, U u);
+
+...
+
+----
+
+[source,java]
+----
+@FunctionalInterface
+public interface BinaryOperator<T> extends BiFunction<T,T,T> {
+...
+
+----
+
+== Identity Element
+
+La bifunction prends 2 éléments
+
+- Que se passe t'il quand la stream est vide ?
+- Que se passe t'il quand la stream contient qu'un seul élément ?
+	
+
+[%step]
+* La "reduction" d'un Stream vide retourne l'"identity element"
+* Si le Stream ne contient qu'un seul élément, alors la réduction correspond à cet élément
+
+== Reduction : autres cas
+
+Prenons la méthode de reduction "max" :
+
+
+[source,java]
+----
+List<Integer> nbs=Arrays.asList(2,1,4);
+		
+nbs.stream().max(((i1,i2) -> i1+i2));
+...
+[%step]
+* Le problème est qu'il n'y a pas d'"identity element" pour l'opération max
+* Donc le max d'un Stream vide n'est pas défini ...
+
+== Reduction : max
+
+Quel est le type de retour de cet appel ? : 
+
+[source,java]
+----
+List<Integer> nbs=Arrays.asList(2,1,4);
+		
+... result=nbs.stream().max(Comparator.naturalOrder());
+----			
+
+[%step]
+* Si le type de retour est int alors la valeur par défaut est 0
+* Si le type de retour est Integer alors la valeur par défaut est null
+* Le type de retour est Optional<Integer>
+
+
+== Optionals
+
+- Optionals est un wrapper
+- Optionals veut dire "Qu'il n'y a peut être pas de résultat"
+
+
+== Optionals
+
+Comment se sert on d'un optional ?
+- La méthode isPresent() retourne true s'il y a quelque chose dans l'optionals
+- La méthode get() retourne la valeur
+
+
+[source,java]
+----
+Optional<Integer> result=nbs.stream().max(Comparator.naturalOrder());	
+if(result.isPresent()) 
+	System.out.println(result.get());
+else 
+	System.out.println("Pas de résultat");
+...
+----
+
+
+== Collectors
+
+Il y a un autre type de réduction les "collectors"
+
+A la place d'aggréger les éléments ,on les met dans un conteneur
+
+
+=== Collectors avec une String
+
+[source,java]
+----
+...
+List<Personne> personnes=Arrays.asList(p1,p2,p3);
+		
+String res=personnes.stream().filter(p->p.getAge()>20)
+	.map(p->p.getNom())
+	.collect(Collectors.joining(","));
+----
+
+
+=== Collectors avec une List
+
+[source,java]
+----
+...
+List<Personne> personnes=Arrays.asList(p1,p2,p3);
+		
+String res=personnes.stream().filter(p->p.getAge()>20)
+	.map(p->p.getNom())
+	.collect(Collectors.toList());
+----
 
 
 
