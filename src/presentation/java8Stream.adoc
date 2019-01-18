@@ -133,7 +133,7 @@ s.forEach(p->System.out.println(p));
 ----
 
 
-== IF : Consumer
+=== IF : Consumer
 
 Consumer est une interface fonctionnelle : 
 [source,java]
@@ -153,11 +153,11 @@ p->System.out.println(p)
 System.out::println //Référence de méthode
 ----
 
-== Comment chainer plusieurs Consumers
+=== Comment chainer plusieurs Consumers
 Comment peut on enchainer plusieurs Consumers sachant que la méthode forEach ne retourne rien ?
 
 
-== Comment chainer plusieurs Consumers
+=== Comment chainer plusieurs Consumers
 Grace aux méthodes abstraites de Consumer:
 [source,java]
 ----
@@ -170,7 +170,7 @@ s.forEach(consNom.andThen(consAge));
 ----
 
 
-=== Deuxiéme opération : filter
+== Deuxiéme opération : filter
 
 La méthode filter permet de filtrer les éléments d'une stream.
 Elle prend en paramétre un prédicat.
@@ -183,7 +183,7 @@ Stream<Personne> s=personnes.stream();
 s.filter(p->p.getAge()>20)
 ----
 
-== IF : Predicat
+=== IF : Predicat
 
 Consumer est une interface fonctionnelle : 
 [source,java]
@@ -202,7 +202,7 @@ Peux être implémenté par une lambda :
 p->p.getAge()>20
 ----
 
-== Comment chainer plusieurs Predicates
+=== Comment chainer plusieurs Predicates
 Comment peut on enchainer plusieurs Consumers sachant que la méthode forEach ne retourne rien ?
 
 on peut chainer plusieurs Consumer avec les méthodes abstraites suivantes :
@@ -216,7 +216,8 @@ default Predicate<T> or(Predicate<? super T> other) { ... }
 (ATTENTION les opérations sont appliqués de gauche à droite et non suivante l'ordre mathématique)
 [source,java]
 ----
-s.filter(nomCommencantParA.or(ageSup20.and(ageInf60)));// (nomCommencantParA OR ageSup20) AND ageInf60
+s.filter(nomCommencantParA.or(ageSup20.and(ageInf60)));
+// (nomCommencantParA OR ageSup20) AND ageInf60
 ----
 
 
@@ -224,25 +225,7 @@ s.filter(nomCommencantParA.or(ageSup20.and(ageInf60)));// (nomCommencantParA OR 
 
 
 
-
-=== Exemple de Map / Filter / Reduce
-Exemple : On veut calculer la moyenne d'age d'une liste de personnes dont l'age est supérieur à 20 ans
-
-
-=== 1ére étape : Map
-Prend en entrée la liste de personnes et renvoi une liste d'age (entier)
-
-=== 2éme étape : Filter
-Filtre dans la liste d'age , les éléments supérieurs à 20.
-
-=== 3éme étape : Reduce
-Equivalent à une agrégation SQL.
-
-Renvoie la moyenne des élements supérieur à 20.
-
-
-
-=== Lazy Operation
+== Lazy Operation
 
 Que fait la méthode filter ?
 
@@ -250,27 +233,27 @@ Que fait la méthode filter ?
 * Elle retourne les streams avec des données triées
 * FAUX => Un Stream ne contient pas de données.
 
-== Que fait la méthode filter ?
+=== Que fait la méthode filter ?
 Un filter ne fait rien, il s'agit juste d'une déclaration
 
 Toutes les méthodes qui retournent un Stream sont Lazy
 
 
-== Type de méthode Stream
+=== Type de méthode Stream
 
 Une méthode qui retourne un Stream est appellé opération intermédiaire
 
 Les autres opérations sont appellés finales
 
-== Méthode peek
+=== Méthode peek
 
-Elle est identique à forEach mais il s'agit d'une opération intermédiarie
+Elle est identique à forEach mais il s'agit d'une opération intermédiaire
 
-== Démo
+=== Démo
 
 
 
-=== Map Operation
+== Map Operation
 
 Exemple : 
 [source,java]
@@ -286,7 +269,7 @@ s.map(p->p.getNom());
 * Prend une Function en paramétre
 		
 
-== IF : Function
+=== IF : Function
 
 Consumer est une interface fonctionnelle : 
 [source,java]
@@ -299,11 +282,11 @@ R apply(T t);
 
 ----
 
-== Operation flatMap
+=== Operation flatMap
 C’est une opération intermédiraire qui permet de mettre à plat un Stream.
 On peut par exemple transformer un Stream<List<Personne>> en Stream<Personne> 
 
-== Démo
+=== Démo
 
 
 
@@ -313,7 +296,7 @@ Le premier type d'agrégation : min , max , ...
 
 
 
-== Etape : Reduce
+=== Etape : Reduce
 
 Exemple : 
 
@@ -321,6 +304,7 @@ Exemple :
 ----
 List<Integer> nbs=Arrays.asList(2,1,4);
 System.out.println(nbs.stream().reduce(0,((i1,i2) -> i1+i2)));
+
 ----			
 
 [%step]
@@ -328,7 +312,7 @@ System.out.println(nbs.stream().reduce(0,((i1,i2) -> i1+i2)));
 * Second argument : opération de réduction de type BinaryOperator<T>
 
 
-== IF : BinaryOperator
+=== IF : BinaryOperator
 
 BinaryOperator est une BiFunction particuliére : 
 [source,java]
@@ -350,7 +334,7 @@ public interface BinaryOperator<T> extends BiFunction<T,T,T> {
 
 ----
 
-== Identity Element
+=== Identity Element
 
 La bifunction prends 2 éléments
 
@@ -362,7 +346,7 @@ La bifunction prends 2 éléments
 * La "reduction" d'un Stream vide retourne l'"identity element"
 * Si le Stream ne contient qu'un seul élément, alors la réduction correspond à cet élément
 
-== Reduction : autres cas
+=== Reduction : autres cas
 
 Prenons la méthode de reduction "max" :
 
@@ -373,11 +357,13 @@ List<Integer> nbs=Arrays.asList(2,1,4);
 		
 nbs.stream().max(((i1,i2) -> i1+i2));
 ...
+----
+
 [%step]
 * Le problème est qu'il n'y a pas d'"identity element" pour l'opération max
 * Donc le max d'un Stream vide n'est pas défini ...
 
-== Reduction : max
+=== Reduction : max
 
 Quel est le type de retour de cet appel ? : 
 
@@ -394,17 +380,19 @@ List<Integer> nbs=Arrays.asList(2,1,4);
 * Le type de retour est Optional<Integer>
 
 
-== Optionals
+=== Optionals
 
 - Optionals est un wrapper
 - Optionals veut dire "Qu'il n'y a peut être pas de résultat"
 
 
-== Optionals
+=== Optionals
 
 Comment se sert on d'un optional ?
-- La méthode isPresent() retourne true s'il y a quelque chose dans l'optionals
-- La méthode get() retourne la valeur
+
+* La méthode isPresent() retourne true s'il y a quelque chose dans l'optionals
+
+* La méthode get() retourne la valeur
 
 
 [source,java]
@@ -420,9 +408,9 @@ else
 
 == Collectors
 
-Il y a un autre type de réduction les "collectors"
+Il y a un autre type de réduction : les "collectors"
 
-A la place d'aggréger les éléments ,on les met dans un conteneur
+A la place d'aggréger les éléments ,on les met dans un "conteneur"
 
 
 === Collectors avec une String
@@ -451,356 +439,17 @@ String res=personnes.stream().filter(p->p.getAge()>20)
 ----
 
 
+=== Collectors avec une Map
 
-=== Implémentation avec une classe concréte  
-[{stepwise}]
-
-.Implémentation
 [source,java]
 ----
-public class FileFilterJava implements FileFilter{
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-}
-----
-
-.Exemple d'appel
-[source,java]
-----
-FileFilter fileFilterJava=new FileFilterJava();		
-File repertoire=new File("c:\\temp");
+...
+List<Personne> personnes=...;
 		
-for(File f:repertoire.listFiles(fileFilterJava))
-	System.out.println(f);
+Map<Integer,List<Personne>> res=personnes.stream()
+	.filter(p->p.getAge()>20)
+	.collect(Collectors.groupingBy(p->p.getAge()));
 ----
-
-
-=== Implémentation avec une classe anonyme  
-[source,java]
-----
-
-FileFilter fileFilterJava=new FileFilter() {		
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-};
-
-File repertoire=new File("c:\\temp");
-
-for(File f:repertoire.listFiles(fileFilterJava))
-	System.out.println(f);
-
-----
-
-=== Classe concréte VS anonyme
-
-[%step]
-* Avec les classes concrètes tout le code n'est pas au même endroit, ce qui nuit à la bonne compréhension du code
-* Avec les classes anonymes on s’encombre de code technique ce qui nuit à la clarté du code
-
-=== Comment écrire une lambda ?
-On se base sur la déclaration de la classe anonyme :
-[source,java]
-----
-
-FileFilter fileFilterJava=new FileFilter() {		
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-};
-----
-
-1 - On récupére les paramétres de la méthode :
-[source,java]
-----
-FileFilter filter=(File pathname)
-----
-
-=== Comment écrire une lambda ?
-On se base sur la déclaration de la classe anonyme :
-[source,java]
-----
-
-FileFilter fileFilterJava=new FileFilter() {		
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-};
-----
-
-2 - On ajoute l'opérateur "->" :
-[source,java]
-----
-FileFilter filter=(File pathname)->
-----
-
-
-=== Comment écrire une lambda ?
-On se base sur la déclaration de la classe anonyme :
-[source,java]
-----
-
-FileFilter fileFilterJava=new FileFilter() {		
-	@Override
-	public boolean accept(File pathname) {
-		return pathname.getName().endsWith(".java");
-	}
-};
-----
-
-3 - On rajoute le code de la méthode :
-[source,java]
-----
-FileFilter filter=(File pathname)->pathname.getName().endsWith(".java");
-----
-
-
-=== Conclusion
-
-[%step]
-* Les lambdas sont juste une nouvelle façon d'écrire les classes anonymes
-* Cela permet  d'écrire des instances de classes anonymes plus facile à lire et à écrire
-
-
-== Démo
-
-=== Conclusion
-
-[%step]
-* Quand on a plusieurs lignes de codes dans la lambda , on utilise les accolades
-* Une lambda , peut prendre de 0 à n paramètres
-
-
-== Interface fonctionnel
-
-=== Quel est le type des lambdas ?
-
-Les lambdas sont de type "interface fonctionnel" ou "functional interface" en anglais 
-
-=== Une interface fonctionnel c'est quoi ?
-
-Une interface avec une méthode abstraite unique (les méthodes d'Object ne comptent pas)
-
-Exemple :
-
-[source,java]
-----
-@FunctionalInterface
-public interface Comparator<T> {
-    int compare(T o1, T o2);
-	boolean equals(Object obj);
-}
-----
-
-=== L'annotation @FunctionalInterface
-
-L'annotation @FunctionalInterface est optionnelle.
-
-Elle sert uniquement au moment de la compilation , le compilateur indique une erreur si l'interface annotée ne correspond pas à une interface fonctionnelle.
- 
-
-=== Démo
-
-=== Conclusion
-
-[%step]
-* Les lambdas sont de type "interface fonctionnel"
-* Une interface fonctionnel c'est une interface avec une méthode abstraite unique
-* L'interface @FunctionalInterface est optionnelle
-
-
-
-== La boite à outils Functionnel interface
-
-
-=== La boite à outils Functionnel interface
-- Dans le package java.util.function
-- 43 nouvelles interfaces
-- Divisée en 4 catégories
-
-=== Supplier
-
-Supplier ou fournisseur ne prend aucun objet en paramètre et en renvoie un. 
-[source,java]
-----
-@FunctionalInterface
-public interface Supplier<T> {
-
-    T get();
-}
-----
-
-
-=== Consumer
-
-Consumer ou consommateur prend un objet en paramètre et ne renvoie rien. 
-[source,java]
-----
-@FunctionalInterface
-public interface Consumer<T> {
-    void accept(T t);
-}
-----
-
-
-=== Function
-
-Function ou fonction prend un objet en paramètre et en renvoie un de type différent 
-[source,java]
-----
-public interface Function<T, R> {
-
-    R apply(T t);
-}
-----
-
-
-=== UnaryOperator
-
-UnaryOperator est une Function spécifique , qui prend un objet en paramètre et renvoie objet du même type que le paramètre.
-
-[source,java]
-----
-@FunctionalInterface
-public interface UnaryOperator<T> extends Function<T, T> {
-	T apply(T t);
-}
-----
-
-
-=== Les variantes
-
-Il existe de nombreuse variantes dans les 4 catégories , comme celles qui prennent plusieurs objet en entrée.
-Exemple : BiConsumer ou BiPredicate
-
-[source,java]
-----
-@FunctionalInterface
-public interface BiConsumer<T, U> {
-    void accept(T t, U u);
-}
-----
-
-[source,java]
-----
-@FunctionalInterface
-public interface BiPredicate<T, U> {
-    boolean test(T t, U u);
-}
-----
-
-
-== Syntaxe avancée pour les lambdas
-
-=== Les paramètres
-
-On n'a pas besoin de préciser le type des paramétres :
-[source,java]
-----
-Comparator<Integer> c=(Integer i1, Integer i2)->Integer.compare(i1, i2);
-----
-devient :
-[source,java]
-----
-Comparator<Integer> c=(i1,i2)->Integer.compare(i1, i2);
-----
-
-=== Les références de méthodes
-
-Quand on a qu'un seul appel de méthode on peut utiliser l'opérateur "::"
-[source,java]
-----
-Consumer<String> consumerPrint=s->System.out.println(s);
-----
-devient :
-[source,java]
-----
-Consumer<String> consumerPrint=System.out::println;
-----
-
-=== Les références de méthodes
-
-Autre exemple 
-[source,java]
-----
-Comparator<Integer> c=(Integer i1, Integer i2)->Integer.compare(i1, i2);
-----
-devient :
-[source,java]
-----
-Comparator<Integer> c=Integer::compare;
-----
-
-
-=== Conclusion
-
-[%step]
-* On n'a pas besoin de préciser le type des paramétres dans les lambdas
-* Quand on a qu'un seul appel de méthode (statique ou non) on peut utiliser l'opérateur "::"
-
-=== Démo
-
-
-== Les lambdas , cela sert à quoi ?
-
-=== Démo
-
-
-== Une lambda est elle un objet ?
-
-=== Une lambda est elle un objet ?
-- Non , il s'agit d'un nouveau type (objet sans identité)
-- Plus rapide que la création d'une classe anonyme
-- Pas besoin de redéfinir les méthodes d'object
-
-== Méthodes par défaut dans les interfaces
-
-=== Méthodes par défaut dans les interfaces
-Depuis java 8 , on peut définir une implémentation par défaut à une méthode.
-Mais à quoi cela sert il ?
-
-=== Méthodes par défaut dans les interfaces
-Cela permet de rajouter de nouvelles méthodes sans casser les contrats d'interface existants :
-
-[source,java]
-----
-public interface Iterable<T> {
-    
-    Iterator<T> iterator();
-    
-    default void forEach(Consumer<? super T> action) {
-        Objects.requireNonNull(action);
-        for (T t : this) {
-            action.accept(t);
-        }
-    }
-}
-----
-
-
-=== Méthodes par défaut dans les interfaces
-Cela permet de rajouter de nouvelles possibilités aux interfaces fonctionnels
-
-[source,java]
-----
-@FunctionalInterface
-public interface Predicate<T> {
-
-    boolean test(T t);
-
-    default Predicate<T> and(Predicate<? super T> other) {
-        Objects.requireNonNull(other);
-        return (t) -> test(t) && other.test(t);
-    }
-}
-----
-
-=== Démo
 
 == Des questions ?
 
