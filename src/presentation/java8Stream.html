@@ -68,7 +68,7 @@ s.map(p-&gt;p.getNom());
 
 R apply(T t);
 
-...</code></pre></div></div></section><section id="_operation_flatmap"><h2>Operation flatMap</h2><div class="paragraph"><p>C’est une opération intermédiraire qui permet de mettre à plat un Stream.
+...</code></pre></div></div></section><section id="_operation_flatmap"><h2>Operation flatMap</h2><div class="paragraph"><p>C’est une opération intermédiaire qui permet de mettre à plat un Stream.
 On peut par exemple transformer un Stream&lt;List&lt;Personne&gt;&gt; en Stream&lt;Personne&gt;</p></div></section><section id="_dmo_3"><h2>Démo</h2></section></section>
 <section><section id="_etape_reduce"><h2>Etape : Reduce</h2><div class="paragraph"><p>Le premier type d&#8217;agrégation : min , max , &#8230;&#8203;</p></div></section><section id="_etape_reduce_2"><h2>Etape : Reduce</h2><div class="paragraph"><p>Exemple :</p></div>
 <div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;Integer&gt; nbs=Arrays.asList(2,1,4);
@@ -93,14 +93,22 @@ nbs.stream().max(((i1,i2) -&gt; i1+i2));
 <div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;Integer&gt; nbs=Arrays.asList(2,1,4);
 
 ... result=nbs.stream().max(Comparator.naturalOrder());</code></pre></div></div>
-<div class="ulist"><ul><li class="fragment"><p>Si le type de retour est int alors la valeur par défaut est 0</p></li><li class="fragment"><p>Si le type de retour est Integer alors la valeur par défaut est null</p></li><li class="fragment"><p>Le type de retour est Optional&lt;Integer&gt;</p></li></ul></div></section><section id="_optionals"><h2>Optionals</h2><div class="ulist"><ul><li><p>Optionals est un wrapper</p></li><li><p>Optionals veut dire "Qu&#8217;il n&#8217;y a peut être pas de résultat"</p></li></ul></div></section><section id="_optionals_2"><h2>Optionals</h2><div class="paragraph"><p>Comment se sert on d&#8217;un optional ?</p></div>
-<div class="ulist"><ul><li><p>La méthode isPresent() retourne true s&#8217;il y a quelque chose dans l&#8217;optionals</p></li><li><p>La méthode get() retourne la valeur</p></li></ul></div>
+<div class="ulist"><ul><li class="fragment"><p>Si le type de retour est int alors la valeur par défaut est 0</p></li><li class="fragment"><p>Si le type de retour est Integer alors la valeur par défaut est null</p></li><li class="fragment"><p>Le type de retour est Optional&lt;Integer&gt;</p></li></ul></div></section><section id="_optionals"><h2>Optionals</h2><div class="ulist"><ul><li><p>Optionals est un wrapper</p></li><li><p>Optionals veut dire "Qu&#8217;il n&#8217;y a peut être pas de résultat"</p></li></ul></div></section><section id="_optionals_2"><h2>Optionals</h2><div class="paragraph"><p>Comment se sert on d&#8217;un optional ?
+* La méthode isPresent() retourne true s&#8217;il y a quelque chose dans l&#8217;optionals</p></div>
+<div class="ulist"><ul><li><p>La méthode get() retourne la valeur</p></li></ul></div>
 <div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Optional&lt;Integer&gt; result=nbs.stream().max(Comparator.naturalOrder());
 if(result.isPresent())
 	System.out.println(result.get());
 else
 	System.out.println("Pas de résultat");
-...</code></pre></div></div></section></section>
+...</code></pre></div></div></section><section id="_optionals_3"><h2>Optionals</h2><div class="ulist"><ul><li><p>On peut définir une valeur par défaut grace à la méthode orElse()</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Optional&lt;Integer&gt; result=nbs.stream().max(Comparator.naturalOrder());
+
+System.out.println(result.orElse(Integer.valueOf(0)));</code></pre></div></div>
+<div class="ulist"><ul><li><p>Il est possible de lancer une exception lorsqu&#8217;on n&#8217;a pas de résultats, grace à la méthode orElse()</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Optional&lt;Integer&gt; result=nbs.stream().max(Comparator.naturalOrder());
+
+System.out.println(result.orElseThrow(Exception::new));</code></pre></div></div></section></section>
 <section><section id="_collectors"><h2>Collectors</h2><div class="paragraph"><p>Il y a un autre type de réduction : les "collectors"</p></div><div class="paragraph"><p>A la place d&#8217;aggréger les éléments ,on les met dans un "conteneur"</p></div></section><section id="_collectors_avec_une_string"><h2>Collectors avec une String</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">...
 List&lt;Personne&gt; personnes=Arrays.asList(p1,p2,p3);
 
@@ -117,6 +125,7 @@ List&lt;Personne&gt; personnes=...;
 Map&lt;Integer,List&lt;Personne&gt;&gt; res=personnes.stream()
 	.filter(p-&gt;p.getAge()&gt;20)
 	.collect(Collectors.groupingBy(p-&gt;p.getAge()));</code></pre></div></div></section></section>
+<section><section id="_parallele"><h2>Parallele</h2><div class="paragraph"><p>Comment lance t&#8217;on des traitements en parralléle avec les streams ?</p></div></section><section id="_dmo_4"><h2>Démo</h2></section><section id="_parallele_conclusion"><h2>Parallele : Conclusion</h2><div class="ulist"><ul><li><p>La méthode parrallele sur Stream est une opération intermédiaire qui retourne un Stream "parralléle"</p></li><li><p>La méthode parallelStream sur Collection retourne un Stream "parralléle"</p></li></ul></div></section></section>
 <section id="_des_questions"><h2>Des questions ?</h2></section>
 <section id="_donc_passionn_et_fier_de_l_tre"><h2>DONC, passionné et fier de l&#8217;être ?</h2><div class="paragraph"><p><span class="image"><img src="images/StarTECH-Java_we-want-you.png" alt="StarTECH Java we want you" width="400"></span></p></div>
 <div class="paragraph"><p>Rejoins-nous !<br>

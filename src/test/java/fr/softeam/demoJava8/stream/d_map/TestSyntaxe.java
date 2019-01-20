@@ -38,5 +38,28 @@ public class TestSyntaxe {
 		}
 	}
 	
+	@Test
+	public void test_max_optional_defautValue(){
+		
+		List<Integer> nbs=Arrays.asList();
+		
+		Optional<Integer> result=nbs.stream().max(Comparator.naturalOrder());
+
+		System.out.println(result.orElse(Integer.valueOf(0)));
+		
+	}
+
+	
+	@Test
+	public void test_max_optional_defautException() throws Exception{
+		
+		List<Integer> nbs=Arrays.asList(2,1,4);
+		
+		Optional<Integer> result=nbs.stream().max(Comparator.naturalOrder());
+
+		System.out.println(result.orElseThrow(Exception::new));
+		
+	}
+	
 
 }

@@ -283,7 +283,7 @@ R apply(T t);
 ----
 
 === Operation flatMap
-C’est une opération intermédiraire qui permet de mettre à plat un Stream.
+C’est une opération intermédiaire qui permet de mettre à plat un Stream.
 On peut par exemple transformer un Stream<List<Personne>> en Stream<Personne> 
 
 === Démo
@@ -389,7 +389,6 @@ List<Integer> nbs=Arrays.asList(2,1,4);
 === Optionals
 
 Comment se sert on d'un optional ?
-
 * La méthode isPresent() retourne true s'il y a quelque chose dans l'optionals
 
 * La méthode get() retourne la valeur
@@ -403,6 +402,27 @@ if(result.isPresent())
 else 
 	System.out.println("Pas de résultat");
 ...
+----
+
+
+=== Optionals
+
+* On peut définir une valeur par défaut grace à la méthode orElse()
+
+[source,java]
+----
+Optional<Integer> result=nbs.stream().max(Comparator.naturalOrder());
+
+System.out.println(result.orElse(Integer.valueOf(0))); 
+----
+
+* Il est possible de lancer une exception lorsqu'on n'a pas de résultats, grace à la méthode orElse()
+
+[source,java]
+----
+Optional<Integer> result=nbs.stream().max(Comparator.naturalOrder());
+
+System.out.println(result.orElseThrow(Exception::new));
 ----
 
 
@@ -450,6 +470,21 @@ Map<Integer,List<Personne>> res=personnes.stream()
 	.filter(p->p.getAge()>20)
 	.collect(Collectors.groupingBy(p->p.getAge()));
 ----
+
+
+== Parallele
+Comment lance t'on des traitements en parralléle avec les streams ?
+
+=== Démo
+
+=== Parallele : Conclusion
+
+- La méthode parrallele sur Stream est une opération intermédiaire qui retourne un Stream "parralléle"
+
+- La méthode parallelStream sur Collection retourne un Stream "parralléle"
+
+
+
 
 == Des questions ?
 
